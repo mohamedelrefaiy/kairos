@@ -27,7 +27,9 @@ Read `interview_notes.md` before touching the CV. Interview answers are first-cl
 One phrase. The thing the role cannot exist without. This anchors S1.
 
 **0c. Build a ranked candidate artifact pool.**
-Scan every CV bullet and every interview answer. For each item that contains a number, a named system, a named outcome, or a named external user, add it to the pool and rank it:
+Scan every CV bullet and every interview answer. For each item that contains a number, a named system, a named outcome, or a named external user, add it to the pool. As you add each item, assign two tags:
+
+**Specificity rank** (1 = strongest proof):
 
 | Rank | Artifact type |
 |------|--------------|
@@ -39,16 +41,14 @@ Scan every CV bullet and every interview answer. For each item that contains a n
 | 6 | Named method or technique tied to a concrete outcome |
 | 7 | Named project with no quantification — use only if nothing above exists |
 
-**0d. Select exactly one artifact for S1 and one for S2.**
-
-Each pool item from step 0c should be tagged by JD relevance:
+**JD relevance tag** (assigned at the time of adding, against the load-bearing requirement from step 0b):
 - **(a) direct match** — speaks directly to the load-bearing requirement
 - **(b) adjacent** — related but not the core requirement
 - **(c) unrelated** — strong proof point but off-topic for this JD
 
-Then select:
-- S1 artifact: the highest-ranked item tagged (a) or (b) that can be stated as a noun phrase. Must be the most JD-relevant item — not the first item in the CV.
-- S2 artifact: the highest-ranked item in the entire pool, regardless of JD relevance. The most impressive falsifiable proof on the page. Must differ from S1.
+**0d. Select exactly one artifact for S1 and one for S2.**
+- S1 artifact: the highest-ranked item tagged (a) or (b). Must be the most JD-relevant item — not the first item in the CV.
+- S2 artifact: the highest-ranked item in the entire pool, regardless of JD relevance tag. The most impressive falsifiable proof on the page. Must differ from S1.
 
 **0e. Scope vs. years in S1.**
 Use whichever is stronger:
