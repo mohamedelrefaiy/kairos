@@ -71,7 +71,7 @@ Paste a job description (or a URL) into Claude Code. kairos runs:
     Submit
 ```
 
-1. **Parse the Job Description**: extract keywords, detect your role archetype, flag fit signals.
+1. **Parse the Job Description**: extract keywords and hard requirements, flag fit signals.
 2. **Interview**: 3 to 5 native-picker questions surface depth and stories the canonical CV does not expose.
 3. **Tailor the CV**: section reordering, bullet rewriting, keyword injection - all against real experience, never invented.
 4. **Advisor gate**: Opus (or a transparent self-audit) reviews every section, every bullet, every keyword injection before the PDF is compiled.
@@ -163,7 +163,7 @@ Paste a Job Description or URL - kairos picks up the existing config and CV auto
 
 ## Configuration
 
-Everything personal lives in `config.yaml` (gitignored). See `config.example.yaml` for the full annotated schema: identity, paths, archetypes, PDF format, advisor toggle.
+Everything personal lives in `config.yaml` (gitignored). See `config.example.yaml` for the full annotated schema: identity, paths, PDF format, advisor toggle.
 
 ```yaml
 identity:
@@ -177,18 +177,6 @@ identity:
     scholar: ""
     portfolio: ""
 ```
-
-## Customising archetypes for your domain
-
-Archetypes are role buckets (AI Platform, ML Research, Data Platform, etc.) that shape how kairos frames your CV. Edit the `archetypes:` block in `config.yaml` with names and Job Description signals specific to your field:
-
-```yaml
-archetypes:
-  - name: "Computational Biology"
-    jd_signals: ["protein", "genomics", "sequencing", "bioinformatics"]
-```
-
-kairos uses these to detect which framing to lead with in the Summary and Skills reorder.
 
 ## How it stays honest
 
