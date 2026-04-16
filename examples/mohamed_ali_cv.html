@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mohamed Ali - CV</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 10.5pt;
+    line-height: 1.35;
+    color: #000;
+    background: #fff;
+  }
+
+  .page {
+    width: 8.5in;
+    margin: 0 auto;
+    padding: 0 0.65in 0.45in 0.65in;
+  }
+
+  /* === HEADER === */
+  .header {
+    text-align: center;
+    margin-bottom: 4px;
+  }
+
+  .header-contact {
+    font-size: 10pt;
+    color: #000;
+    margin-bottom: 4px;
+  }
+
+  .header-contact a { color: #000; text-decoration: none; }
+
+  .header h1 {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 22pt;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #000;
+    margin: 4px 0 2px 0;
+  }
+
+  /* === SECTION === */
+  .section {
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-size: 11pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1.5px solid #000;
+    padding-bottom: 2px;
+    margin-bottom: 8px;
+    color: #006400;
+  }
+
+  /* === JOB === */
+  .job { margin-bottom: 7px; }
+
+  .job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .job-title-block { flex: 1; }
+
+  .job-org {
+    font-weight: 700;
+    font-size: 11pt;
+  }
+
+  .job-role {
+    font-size: 10.5pt;
+  }
+
+  .job-right {
+    text-align: right;
+    font-size: 10.5pt;
+    white-space: nowrap;
+    padding-left: 12px;
+    font-weight: 700;
+  }
+
+  .job ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin-top: 4px;
+  }
+
+  .job li {
+    font-size: 10.5pt;
+    line-height: 1.45;
+    margin-bottom: 3px;
+    text-align: justify;
+  }
+
+  /* === EDUCATION === */
+  .edu-item { margin-bottom: 5px; }
+
+  .edu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .edu-left { flex: 1; }
+
+  .edu-org {
+    font-weight: 700;
+    font-size: 11pt;
+  }
+
+  .edu-degree {
+    font-size: 10.5pt;
+  }
+
+  .edu-desc {
+    font-size: 10pt;
+    margin-top: 2px;
+    list-style: disc;
+    padding-left: 20px;
+  }
+
+  .edu-desc li {
+    line-height: 1.45;
+  }
+
+  .edu-right {
+    text-align: right;
+    font-size: 10.5pt;
+    white-space: nowrap;
+    padding-left: 12px;
+    font-weight: 700;
+  }
+
+  /* === PROJECTS === */
+  .project { margin-bottom: 7px; }
+
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .project-name {
+    font-weight: 700;
+    font-size: 10.5pt;
+    flex: 1;
+  }
+
+  .project-year {
+    font-weight: 700;
+    font-size: 10.5pt;
+    white-space: nowrap;
+    padding-left: 12px;
+  }
+
+  .project ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin-top: 4px;
+  }
+
+  .project li {
+    font-size: 10.5pt;
+    line-height: 1.45;
+    margin-bottom: 3px;
+    text-align: justify;
+  }
+
+  /* === SKILLS === */
+  .skills-block {
+    font-size: 10.5pt;
+    line-height: 1.5;
+    margin-bottom: 3px;
+    text-align: justify;
+  }
+
+  /* === PUBLICATIONS === */
+  .pub-list {
+    padding-left: 20px;
+    font-size: 10.5pt;
+    line-height: 1.5;
+  }
+
+  .pub-list li {
+    margin-bottom: 3px;
+  }
+
+  /* === AWARDS === */
+  .award-item { margin-bottom: 6px; }
+
+  .award-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .award-left { flex: 1; }
+
+  .award-name {
+    font-weight: 700;
+    font-size: 10.5pt;
+  }
+
+  .award-org {
+    font-size: 10pt;
+  }
+
+  .award-right {
+    font-weight: 700;
+    font-size: 10.5pt;
+    white-space: nowrap;
+    padding-left: 12px;
+  }
+
+  /* === PRINT === */
+  @page {
+    size: Letter;
+    margin: 0.5in 0.65in;
+  }
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { padding: 0; width: auto; }
+  }
+
+
+  .avoid-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Mohamed Ali</h1>
+    <div class="header-contact" style="margin-top:6px;">
+      Remote, United States &nbsp;|&nbsp;
+      <a href="https://example.com">mohamedali.dev</a> &nbsp;|&nbsp;
+      <a href="https://github.com/mohamedali">github.com/mohamedali</a> &nbsp;|&nbsp;
+      <a href="mailto:mohamed@example.com">mohamed@example.com</a>
+    </div>
+  </div>
+
+  <!-- PROFESSIONAL SUMMARY -->
+  <div class="section avoid-break" style="margin-top:12px;">
+    <div class="section-title">Professional Summary</div>
+    <div style="font-size:10.5pt;line-height:1.5;text-align:justify;">
+      Data platform engineer with five years building streaming Kafka pipelines and a Python feature store serving two in-house ML teams, with open-source contributions to a widely used retrieval library. Shipped an internal evaluator for retrieval-augmented Large Language Model (LLM) assistants that cut review time by 40 percent across forty daily queries, with the whole stack open-sourced under Apache 2.0.
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="section avoid-break">
+    <div class="section-title">Education</div>
+
+    <div class="edu-item">
+      <div class="edu-header">
+        <div class="edu-left">
+          <div class="edu-org">State University</div>
+          <div class="edu-degree">M.S. in Computer Science, Machine Learning concentration</div>
+        </div>
+        <div class="edu-right">2018 - 2020 &nbsp;|&nbsp; GPA 3.9</div>
+      </div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-header">
+        <div class="edu-left">
+          <div class="edu-org">State University</div>
+          <div class="edu-degree">B.S. in Computer Science; Minor in Statistics</div>
+        </div>
+        <div class="edu-right">2014 - 2018 &nbsp;|&nbsp; GPA 3.8</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SELECTED OPEN SOURCE PROJECTS -->
+  <div class="section">
+    <div class="section-title">Selected Open Source Projects</div>
+
+    <div class="project avoid-break">
+      <div class="project-header">
+        <div class="project-name">retrieveval: Evaluator for RAG Assistants &nbsp;|&nbsp; <span style="font-weight:normal;font-style:italic;">Python, FastAPI, Postgres, pgvector</span></div>
+        <div class="project-year">2025</div>
+      </div>
+      <ul>
+        <li>Designed a ground-truth-free scoring protocol that compares retrieved chunks against LLM-judged rubrics rather than gold labels, letting teams measure retrieval quality on private corpora without labelled data.</li>
+        <li>Implemented a lightweight replay layer that caches embeddings and LLM verdicts per commit, turning overnight eval runs into ten-minute regression checks for retrieval-augmented assistants.</li>
+        <li>Shipped a CLI plus a Python SDK backed by a single evaluation core so notebook experimenters and CI pipelines both call the same scoring path.</li>
+      </ul>
+    </div>
+
+    <div class="project avoid-break">
+      <div class="project-header">
+        <div class="project-name">streamline-py: Declarative Streaming Pipelines &nbsp;|&nbsp; <span style="font-weight:normal;font-style:italic;">Python, Kafka, asyncio</span></div>
+        <div class="project-year">2024</div>
+      </div>
+      <ul>
+        <li>Built a typed plan-execution layer that lets engineers declare a multi-stage streaming topology in 30 lines of Python and have it materialize as Kafka topics and consumer groups with exactly-once semantics.</li>
+        <li>Introduced a back-pressure protocol that degrades gracefully under partition skew by rerouting hot keys to a slower secondary lane, a failure mode most naive streamers crash under.</li>
+      </ul>
+    </div>
+
+    <div class="project avoid-break">
+      <div class="project-header">
+        <div class="project-name">tinyfs: Fast File-Based Key-Value Store &nbsp;|&nbsp; <span style="font-weight:normal;font-style:italic;">Rust, Tokio</span></div>
+        <div class="project-year">2023</div>
+      </div>
+      <ul>
+        <li>Wrote a log-structured KV engine in Rust that sustains 120k writes per second on a single NVMe disk, benchmarked against RocksDB and sled with reproducible scripts.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <div class="section">
+    <div class="section-title">Experience</div>
+
+    <div class="job">
+      <div class="job-header">
+        <div class="job-title-block">
+          <div class="job-org">Acme Analytics</div>
+          <div class="job-role">Senior Data Platform Engineer</div>
+        </div>
+        <div class="job-right">Jan 2022 - Present</div>
+      </div>
+      <ul>
+        <li>Led a migration from nightly batch ETL to event-driven Kafka streaming that removed a 6-hour SLA gap on the revenue-attribution product and let analysts query same-day data for the first time.</li>
+        <li>Designed a Python feature store that both the recommendations and fraud-detection ML teams share, replacing two parallel implementations and cutting feature-onboarding time from a week to a day.</li>
+        <li>Built an observability layer that tags every record with lineage metadata so platform users can trace a value from dashboard back through Kafka, feature store, and source system in under five clicks.</li>
+        <li>Mentored three junior engineers through their first on-call rotation, with written runbooks that cut our incident mean-time-to-recovery from 45 to 18 minutes.</li>
+      </ul>
+    </div>
+
+    <div class="job avoid-break">
+      <div class="job-header">
+        <div class="job-title-block">
+          <div class="job-org">Beacon Software</div>
+          <div class="job-role">Machine Learning Engineer</div>
+        </div>
+        <div class="job-right">Aug 2020 - Dec 2021</div>
+      </div>
+      <ul>
+        <li>Shipped a retrieval-augmented LLM assistant that answers customer-success questions over 8,000 internal docs, with an evaluator (later open-sourced as retrieveval) that gates every deploy.</li>
+        <li>Reduced embedding-index rebuild cost by 70 percent by introducing incremental indexing keyed on document hash, a win measured across six months of production deploys.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TECHNICAL SKILLS -->
+  <div class="section avoid-break">
+    <div class="section-title">Technical Skills</div>
+
+    <div class="skills-block">
+      <strong>Data Platform and Streaming:</strong> Kafka, Kafka Streams, Flink, Spark, Airflow, dbt; event-driven pipeline design with exactly-once semantics, back-pressure and partition-skew handling, streaming-to-batch reconciliation, Postgres and ClickHouse analytics stores
+    </div>
+    <div class="skills-block">
+      <strong>ML Systems and LLMs:</strong> Python feature stores, offline and online feature parity, retrieval-augmented generation (RAG), embedding indexes (pgvector, FAISS), evaluator design for LLM assistants, ground-truth-free scoring, prompt regression testing
+    </div>
+    <div class="skills-block">
+      <strong>Software Engineering:</strong> Python, Rust, TypeScript; FastAPI, asyncio, Tokio; Docker, Kubernetes, Terraform; Git, CI/CD with GitHub Actions; testable module boundaries, dual-surface APIs (CLI and SDK) backed by a shared core, API versioning
+    </div>
+    <div class="skills-block">
+      <strong>Observability and Reliability:</strong> Prometheus, Grafana, OpenTelemetry, structured logging; lineage tagging, incident runbooks, blameless post-mortems, SLA / SLO definition and tracking
+    </div>
+    <div class="skills-block">
+      <strong>Foundations:</strong> distributed systems (consensus, replication, partitioning), database internals, algorithmic complexity analysis, probability and statistics for ML evaluation
+    </div>
+  </div>
+
+  <!-- PUBLICATIONS -->
+  <div class="section avoid-break">
+    <div class="section-title">Publications</div>
+    <ol class="pub-list">
+      <li><strong>Ali, M.</strong>, &amp; Chen, L. (2024). Ground-truth-free evaluators for retrieval-augmented LLM assistants. <em>Proceedings of the Workshop on Evaluation of Retrieval Systems.</em></li>
+      <li>Chen, L., <strong>Ali, M.</strong>, et al. (2023). Incremental embedding indexes for evolving corpora. <em>Conference on Information and Knowledge Management</em>, 210-218.</li>
+    </ol>
+  </div>
+
+  <!-- HONORS AND AWARDS -->
+  <div class="section avoid-break">
+    <div class="section-title">Honors and Awards</div>
+
+    <div class="award-item">
+      <div class="award-header">
+        <div class="award-left">
+          <div class="award-name">Engineering Excellence Award</div>
+          <div class="award-org">Acme Analytics, for the Kafka streaming migration</div>
+        </div>
+        <div class="award-right">2024</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICE AND LEADERSHIP -->
+  <div class="section avoid-break">
+    <div class="section-title">Service and Leadership</div>
+    <div class="award-item">
+      <div class="award-header">
+        <div class="award-left">
+          <div class="award-name">Maintainer</div>
+          <div class="award-org">retrieveval open-source project (500+ GitHub stars)</div>
+        </div>
+        <div class="award-right">2023 - Present</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+# kairos configuration
+#
+# Copy this file to `config.yaml` and fill in your details. kairos reads
+# config.yaml at runtime. config.yaml is gitignored so your personal
+# information never gets committed.
+
+identity:
+  # Required
+  name: "Mohamed Ali"
+  email: "mohamed@example.com"
+  location: "Remote / City, Country"
+  sponsorship_required: false       # true if you need work authorization sponsorship
+
+  # Optional. Leave as empty string "" to omit from the CV header.
+  links:
+    linkedin: ""                    # e.g., "linkedin.com/in/mohamedali"
+    github:   ""                    # e.g., "github.com/mohamedali"
+    scholar:  ""                    # Google Scholar URL
+    portfolio: ""                   # personal site URL
+
+paths:
+  # Your canonical CV, copied and tailored per application.
+  base_cv: "./templates/cv_template.html"
+
+  # Where tailored applications are written.
+  # Subfolders: preparing/ (drafts) and submitted/ (sent).
+  applications_dir: "./applications"
+
+
+# Role archetypes shape how kairos frames your CV for a given JD.
+# Customise these to your domain. If unset, kairos uses its built-in defaults.
+archetypes:
+  - name: "AI Platform"
+    jd_signals: ["RAG", "evals", "observability", "LLM", "retrieval"]
+  - name: "Data Platform / Backend"
+    jd_signals: ["pipelines", "distributed", "ETL", "streaming", "Kafka"]
+  - name: "ML Research"
+    jd_signals: ["foundation models", "pretraining", "RL", "benchmarks"]
+  - name: "Forward Deployed / Solutions"
+    jd_signals: ["client", "deployment", "on-site", "customer success"]
+
+pdf:
+  # "Letter" for US or Canada, "A4" elsewhere. kairos can also auto-detect from
+  # the company location during the pipeline.
+  page_format: "Letter"
+
+  # ATS-safe default. Do not change unless you know your recipient's parser.
+  font_family: "Times New Roman"
+
+advisor:
+  # The advisor gate uses Opus 4.6 to review the CV draft against the
+  # Professional Summary Spec and the writing ban list before the PDF is
+  # compiled. If your Claude Code plan does not expose the advisor() tool,
+  # kairos skips the gate and runs a self-audit against the same checklist.
+  # Set to false to force-skip even when advisor is available.
+  enabled: true

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{NAME}} - CV</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 10.5pt;
+    line-height: 1.35;
+    color: #000;
+    background: #fff;
+  }
+
+  .page {
+    width: 8.5in;
+    margin: 0 auto;
+    padding: 0 0.65in 0.45in 0.65in;
+  }
+
+  /* === HEADER === */
+  .header {
+    text-align: center;
+    margin-bottom: 4px;
+  }
+
+  .header-contact {
+    font-size: 10pt;
+    color: #000;
+    margin-bottom: 4px;
+  }
+
+  .header-contact a { color: #000; text-decoration: none; }
+
+  .header h1 {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 22pt;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #000;
+    margin: 4px 0 2px 0;
+  }
+
+  /* === SECTION === */
+  .section {
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-size: 11pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1.5px solid #000;
+    padding-bottom: 2px;
+    margin-bottom: 8px;
+    color: #006400;
+  }
+
+  /* === JOB === */
+  .job { margin-bottom: 7px; }
+
+  .job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .job-title-block { flex: 1; }
+
+  .job-org {
+    font-weight: 700;
+    font-size: 11pt;
+  }
+
+  .job-role {
+    font-size: 10.5pt;
+  }
+
+  .job-right {
+    text-align: right;
+    font-size: 10.5pt;
+    white-space: nowrap;
+    padding-left: 12px;
+    font-weight: 700;
+  }
+
+  .job ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin-top: 4px;
+  }
+
+  .job li {
+    font-size: 10.5pt;
+    line-height: 1.45;
+    margin-bottom: 3px;
+    text-align: justify;
+  }
+
+  /* === EDUCATION === */
+  .edu-item { margin-bottom: 5px; }
+
+  .edu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .edu-left { flex: 1; }
+
+  .edu-org {
+    font-weight: 700;
+    font-size: 11pt;
+  }
+
+  .edu-degree {
+    font-size: 10.5pt;
+  }
+
+  .edu-desc {
+    font-size: 10pt;
+    margin-top: 2px;
+    list-style: disc;
+    padding-left: 20px;
+  }
+
+  .edu-desc li {
+    line-height: 1.45;
+  }
+
+  .edu-right {
+    text-align: right;
+    font-size: 10.5pt;
+    white-space: nowrap;
+    padding-left: 12px;
+    font-weight: 700;
+  }
+
+  /* === PROJECTS === */
+  .project { margin-bottom: 7px; }
+
+  .project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .project-name {
+    font-weight: 700;
+    font-size: 10.5pt;
+    flex: 1;
+  }
+
+  .project-year {
+    font-weight: 700;
+    font-size: 10.5pt;
+    white-space: nowrap;
+    padding-left: 12px;
+  }
+
+  .project ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin-top: 4px;
+  }
+
+  .project li {
+    font-size: 10.5pt;
+    line-height: 1.45;
+    margin-bottom: 3px;
+    text-align: justify;
+  }
+
+  /* === SKILLS === */
+  .skills-block {
+    font-size: 10.5pt;
+    line-height: 1.5;
+    margin-bottom: 3px;
+    text-align: justify;
+  }
+
+  /* === PUBLICATIONS === */
+  .pub-list {
+    padding-left: 20px;
+    font-size: 10.5pt;
+    line-height: 1.5;
+  }
+
+  .pub-list li {
+    margin-bottom: 3px;
+  }
+
+  /* === AWARDS === */
+  .award-item { margin-bottom: 6px; }
+
+  .award-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .award-left { flex: 1; }
+
+  .award-name {
+    font-weight: 700;
+    font-size: 10.5pt;
+  }
+
+  .award-org {
+    font-size: 10pt;
+  }
+
+  .award-right {
+    font-weight: 700;
+    font-size: 10.5pt;
+    white-space: nowrap;
+    padding-left: 12px;
+  }
+
+  /* === PRINT === */
+  @page {
+    size: Letter;
+    margin: 0.5in 0.65in;
+  }
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { padding: 0; width: auto; }
+  }
+
+  .avoid-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>{{NAME}}</h1>
+    <div class="header-contact" style="margin-top:6px;">
+      {{LOCATION}} &nbsp;|&nbsp;
+      <a href="{{PORTFOLIO_URL}}">{{PORTFOLIO_DISPLAY}}</a> &nbsp;|&nbsp;
+      <a href="{{GITHUB_URL}}">{{GITHUB_DISPLAY}}</a> &nbsp;|&nbsp;
+      <a href="mailto:{{EMAIL}}">{{EMAIL}}</a>
+    </div>
+  </div>
+
+  <!-- PROFESSIONAL SUMMARY -->
+  <div class="section avoid-break" style="margin-top:12px;">
+    <div class="section-title">Professional Summary</div>
+    <div style="font-size:10.5pt;line-height:1.5;text-align:justify;">
+      {{SUMMARY}}
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="section avoid-break">
+    <div class="section-title">Education</div>
+
+    <div class="edu-item">
+      <div class="edu-header">
+        <div class="edu-left">
+          <div class="edu-org">{{EDU_1_ORG}}</div>
+          <div class="edu-degree">{{EDU_1_DEGREE}}</div>
+        </div>
+        <div class="edu-right">{{EDU_1_DATES}} &nbsp;|&nbsp; {{EDU_1_NOTE}}</div>
+      </div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-header">
+        <div class="edu-left">
+          <div class="edu-org">{{EDU_2_ORG}}</div>
+          <div class="edu-degree">{{EDU_2_DEGREE}}</div>
+        </div>
+        <div class="edu-right">{{EDU_2_DATES}} &nbsp;|&nbsp; {{EDU_2_NOTE}}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SELECTED OPEN SOURCE PROJECTS -->
+  <div class="section">
+    <div class="section-title">Selected Open Source Projects</div>
+
+    <div class="project avoid-break">
+      <div class="project-header">
+        <div class="project-name">{{PROJECT_1_NAME}} &nbsp;|&nbsp; <span style="font-weight:normal;font-style:italic;">{{PROJECT_1_STACK}}</span></div>
+        <div class="project-year">{{PROJECT_1_YEAR}}</div>
+      </div>
+      <ul>
+        <li>{{PROJECT_1_BULLET_1}}</li>
+        <li>{{PROJECT_1_BULLET_2}}</li>
+        <li>{{PROJECT_1_BULLET_3}}</li>
+      </ul>
+    </div>
+
+    <div class="project avoid-break">
+      <div class="project-header">
+        <div class="project-name">{{PROJECT_2_NAME}} &nbsp;|&nbsp; <span style="font-weight:normal;font-style:italic;">{{PROJECT_2_STACK}}</span></div>
+        <div class="project-year">{{PROJECT_2_YEAR}}</div>
+      </div>
+      <ul>
+        <li>{{PROJECT_2_BULLET_1}}</li>
+        <li>{{PROJECT_2_BULLET_2}}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- RESEARCH AND PROFESSIONAL EXPERIENCE -->
+  <div class="section">
+    <div class="section-title">Research and Professional Experience</div>
+
+    <div class="job">
+      <div class="job-header">
+        <div class="job-title-block">
+          <div class="job-org">{{JOB_1_ORG}}</div>
+          <div class="job-role">{{JOB_1_ROLE}}</div>
+        </div>
+        <div class="job-right">{{JOB_1_DATES}}</div>
+      </div>
+      <ul>
+        <li>{{JOB_1_BULLET_1}}</li>
+        <li>{{JOB_1_BULLET_2}}</li>
+        <li>{{JOB_1_BULLET_3}}</li>
+        <li>{{JOB_1_BULLET_4}}</li>
+      </ul>
+    </div>
+
+    <div class="job avoid-break">
+      <div class="job-header">
+        <div class="job-title-block">
+          <div class="job-org">{{JOB_2_ORG}}</div>
+          <div class="job-role">{{JOB_2_ROLE}}</div>
+        </div>
+        <div class="job-right">{{JOB_2_DATES}}</div>
+      </div>
+      <ul>
+        <li>{{JOB_2_BULLET_1}}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TECHNICAL SKILLS -->
+  <div class="section avoid-break">
+    <div class="section-title">Technical Skills</div>
+
+    <div class="skills-block">
+      <strong>{{SKILLS_1_CATEGORY}}:</strong> {{SKILLS_1_CONTENT}}
+    </div>
+    <div class="skills-block">
+      <strong>{{SKILLS_2_CATEGORY}}:</strong> {{SKILLS_2_CONTENT}}
+    </div>
+    <div class="skills-block">
+      <strong>{{SKILLS_3_CATEGORY}}:</strong> {{SKILLS_3_CONTENT}}
+    </div>
+    <div class="skills-block">
+      <strong>{{SKILLS_4_CATEGORY}}:</strong> {{SKILLS_4_CONTENT}}
+    </div>
+    <div class="skills-block">
+      <strong>{{SKILLS_5_CATEGORY}}:</strong> {{SKILLS_5_CONTENT}}
+    </div>
+  </div>
+
+  <!-- PUBLICATIONS -->
+  <div class="section avoid-break">
+    <div class="section-title">Publications</div>
+    <ol class="pub-list">
+      <li>{{PUB_1}}</li>
+      <li>{{PUB_2}}</li>
+    </ol>
+  </div>
+
+  <!-- HONORS AND AWARDS -->
+  <div class="section avoid-break">
+    <div class="section-title">Honors and Awards</div>
+
+    <div class="award-item">
+      <div class="award-header">
+        <div class="award-left">
+          <div class="award-name">{{AWARD_1_NAME}}</div>
+          <div class="award-org">{{AWARD_1_ORG}}</div>
+        </div>
+        <div class="award-right">{{AWARD_1_YEAR}}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICE AND LEADERSHIP -->
+  <div class="section avoid-break">
+    <div class="section-title">Service and Leadership</div>
+    <div class="award-item">
+      <div class="award-header">
+        <div class="award-left">
+          <div class="award-name">{{SERVICE_1_ROLE}}</div>
+          <div class="award-org">{{SERVICE_1_ORG}}</div>
+        </div>
+        <div class="award-right">{{SERVICE_1_DATES}}</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

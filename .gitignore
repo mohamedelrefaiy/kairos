@@ -1,0 +1,21 @@
+# User-specific config (copy from config.example.yaml and fill in)
+config.yaml
+
+# Generated application artifacts
+applications/
+memory/
+
+# Node
+node_modules/
+package-lock.json
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Generated PDFs in examples should not be checked in
+examples/*.pdf
