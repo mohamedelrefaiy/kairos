@@ -40,7 +40,14 @@ Scan every CV bullet and every interview answer. For each item that contains a n
 | 7 | Named project with no quantification — use only if nothing above exists |
 
 **0d. Select exactly one artifact for S1 and one for S2.**
-- S1 artifact: the highest-ranked item from pool (a) or (b) that can be stated as a noun phrase. Must be the most JD-relevant item — not the first item in the CV.
+
+Each pool item from step 0c should be tagged by JD relevance:
+- **(a) direct match** — speaks directly to the load-bearing requirement
+- **(b) adjacent** — related but not the core requirement
+- **(c) unrelated** — strong proof point but off-topic for this JD
+
+Then select:
+- S1 artifact: the highest-ranked item tagged (a) or (b) that can be stated as a noun phrase. Must be the most JD-relevant item — not the first item in the CV.
 - S2 artifact: the highest-ranked item in the entire pool, regardless of JD relevance. The most impressive falsifiable proof on the page. Must differ from S1.
 
 **0e. Scope vs. years in S1.**
@@ -135,7 +142,7 @@ Problems: meta-framing, banned phrases, zero falsifiable claims. "Proven track r
 > Data platform engineer with five years building streaming Kafka pipelines and a Python feature store serving two in-house ML teams. Shipped an internal evaluator for retrieval-augmented Large Language Model (LLM) assistants that cut review time by 40 percent, with the whole stack open-sourced under Apache 2.0.
 
 - S1: scope ("serving two ML teams") + concrete artifact (Kafka pipelines, feature store). Years present but scope strengthens them.
-- S2: rank-1 artifact (40 percent) + rank-4 artifact (open-sourced). Two falsifiable claims in one sentence.
+- S2: rank-1 artifact (40 percent) + a second concrete, falsifiable detail (the Apache 2.0 open-source release). Two falsifiable claims in one sentence. Note: "open-sourced under Apache 2.0" qualifies here because it is a verifiable, named fact — not because it signals adoption. A rank-4 label requires measurable adoption data (stars, forks, downloads); absent that, treat it as supporting detail alongside a rank-1 artifact rather than a standalone proof.
 
 ### Example 2: Strong CV, ML Research Engineer JD
 

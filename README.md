@@ -163,7 +163,7 @@ Paste a Job Description or URL - kairos picks up the existing config and CV auto
 
 ## Configuration
 
-Everything personal lives in `config.yaml` (gitignored). See `config.example.yaml` for the full annotated schema: identity, paths, PDF format, advisor toggle.
+Everything personal lives in `config.yaml` (gitignored). See `config.example.yaml` for the full annotated schema: identity, paths, PDF format, advisor toggle, and archetypes.
 
 ```yaml
 identity:

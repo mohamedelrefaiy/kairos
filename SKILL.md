@@ -264,7 +264,7 @@ Before saving any HTML, markdown, or text output, run this grep against the full
 grep -inE "passionate|results.oriented|proven track record|leveraged|spearheaded|facilitated|seamless|cutting.edge|directly aligned|demonstrating commitment|directly transferable|synergies|excited to|motivated by|seeking to|looking to|eager to|strong background|deep expertise|combining .+ with" <output-file>
 ```
 
-Every match must be removed or rewritten before saving. There are no exceptions. If a phrase is in a quote from the user that is being reproduced verbatim, wrap it in an HTML comment to flag it for review rather than silently keeping it.
+Every match must be removed or rewritten before saving. There are no exceptions. This applies to verbatim user quotes as well: if a quoted phrase contains a banned term, do not preserve it in the output file — not even inside an HTML comment. Paraphrase, summarize, or omit it instead.
 
 ### Keyword injection (legitimate reformulation only)
 - JD says "RAG pipelines" and CV says "LLM workflows with retrieval" → rewrite as "RAG pipeline design and LLM orchestration workflows"
