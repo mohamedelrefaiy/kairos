@@ -103,13 +103,32 @@ Build the canonical CV by asking the user section by section via `AskUserQuestio
 
 1. **Identity**: name, email, location, links (already collected in Step 1 - skip if done).
 2. **Education**: for each degree - institution, degree title, field, start/end dates, GPA (optional), notable awards or thesis.
-3. **Experience**: for each role - company, title, start/end dates, 3-5 bullets describing what they built and what it achieved. For each bullet, ask "what was the hard or unique part?" to avoid generic mechanics.
-4. **Projects**: for each open-source or personal project - name, URL, one-line description, 2-3 bullets on what it does and what makes it non-obvious.
+3. **Experience**: for each role - company, title, start/end dates, then run the bullet extraction protocol below.
+4. **Projects**: for each open-source or personal project - name, URL, one-line description, then run the bullet extraction protocol below for each project.
 5. **Skills**: ask them to name the tools, languages, and frameworks they use actively. Do not suggest a list - let them name what is real.
 6. **Publications** (optional): title, venue, year, co-authors, one-line summary.
 7. **Awards and honours** (optional): name, year, brief context.
 
 After each section, confirm the content looks right before moving to the next. After all sections, render a preview summary and ask for approval before saving the final HTML.
+
+#### Bullet extraction protocol (Experience and Projects)
+
+For each role or project, run this 3-question probe sequence via `AskUserQuestion`. Never accept the first answer as a bullet — the first answer is always a description. The bullet comes from the follow-up.
+
+**Q1 — What did you build or change?**
+Ask the user to describe in one sentence what they built, shipped, or changed. Accept any answer, even vague. This is just the opening.
+
+**Q2 — What would a different engineer have done instead, and why did you choose differently?**
+This is the key question. A generic answer ("I used microservices") means the decision wasn't actually theirs or they can't articulate it. If the answer is still generic after one follow-up, write the bullet at the level of specificity they gave — do not inflate. Flag the bullet with an HTML comment `<!-- needs specifics -->` so it surfaces in the advisor gate.
+
+**Q3 — Is there a number attached to any outcome?**
+Ask explicitly: "Do you have any numbers for this? Scale, speed, reduction, users, requests per second, anything." If yes, include it. If no, ask: "Who used this besides your team?" Named downstream users are rank-2 artifacts and count as proof.
+
+**Bullet format rule**: Lead with the decision or outcome, not the task. Two lines max.
+- Failing: "Implemented a caching layer using Redis to improve performance."
+- Passing: "Replaced a synchronous DB call with a Redis read-through cache after profiling revealed it as the 400ms bottleneck in the checkout path, cutting p99 latency by 60 percent."
+
+If after Q2 and Q3 the user still has only a description with no decision and no number, write the bullet honestly at that level and add `<!-- needs specifics -->`. Never fabricate.
 
 ---
 
@@ -184,14 +203,18 @@ Use a **clarifying-question style**: every question is answerable with a tap (pi
 
 1. Read the canonical CV at `{{paths.base_cv}}` and extract the JD's 6 to 10 hard requirements.
 2. For each requirement, mark as **clear match**, **adjacent**, or **gap**.
-3. Compose **3 opening questions** covering: the single most load-bearing JD requirement, the biggest gap or adjacency, and one depth/motivation probe. Send them as a single `AskUserQuestion` batch.
+3. Compose **3 opening questions** and send as a single `AskUserQuestion` batch:
+   - **Q1 — Lead requirement match**: "How closely does your experience match [load-bearing JD requirement]?" Options: direct match I can name, adjacent work, nothing direct.
+   - **Q2 — Biggest gap or adjacency**: Target the single largest gap from step 2. "The JD requires [gap]. Have you touched this?" Options: yes with specifics, indirectly, not at all.
+   - **Q3 — Gap-bridge probe** (not a motivation probe): "Is there work you've done that isn't on your CV yet that speaks to [load-bearing requirement] or [biggest gap]?" Options: yes — I'll describe it, nothing relevant, CV already covers it. This question exists purely to surface unlisted artifacts for the candidate pool. It is not an invitation to express enthusiasm. Any answer that is only about interest or excitement (not work done) is discarded — do not feed it into the CV.
 4. **Adaptive follow-ups** (cap at 2): only when an answer was "Other" without detail, or a gap still has no signal. Each follow-up is another `AskUserQuestion` with 2 to 4 options.
 5. If the user says "just run it", "skip the interview", or similar, skip to eval and use only what's in the CV.
 
 ### What to do with the answers
 
-- Feed them into Block B (CV Match) and Block E (Personalization Plan) so the tailored CV can legitimately reformulate using the user's spoken experience.
-- Never fabricate. If an interview answer contradicts the CV (e.g., user claims depth in something not on the CV), ask whether to add it as a new bullet with specifics, or leave it off.
+- Feed concrete experience answers into the artifact pool for the Summary (step 0a) and into the bullet rewriting step for Tailor CV.
+- Discard any answer that is only motivation, enthusiasm, or interest — these belong in a cover letter, not the CV.
+- Never fabricate. If an interview answer introduces a new claim not on the CV, ask whether to add it as a new bullet with specifics, or leave it off.
 - Save a short `interview_notes.md` in the application folder capturing the Q&A. This is the paper trail for any new claims introduced into the CV.
 
 ---
@@ -233,6 +256,16 @@ Never use em-dashes (`—`) or en-dashes (`–`) anywhere in any output artifact
 - Use the JD's exact vocabulary to reformulate real experience, never to invent.
 - Short sentences. Action verbs. Specifics over abstractions. Name tools, projects, and concrete outcomes.
 
+### Filler scan (run before saving any output artifact)
+
+Before saving any HTML, markdown, or text output, run this grep against the full content. Any match is a rewrite trigger — not a warning.
+
+```bash
+grep -inE "passionate|results.oriented|proven track record|leveraged|spearheaded|facilitated|seamless|cutting.edge|directly aligned|demonstrating commitment|directly transferable|synergies|excited to|motivated by|seeking to|looking to|eager to|strong background|deep expertise|combining .+ with" <output-file>
+```
+
+Every match must be removed or rewritten before saving. There are no exceptions. If a phrase is in a quote from the user that is being reproduced verbatim, wrap it in an HTML comment to flag it for review rather than silently keeping it.
+
 ### Keyword injection (legitimate reformulation only)
 - JD says "RAG pipelines" and CV says "LLM workflows with retrieval" → rewrite as "RAG pipeline design and LLM orchestration workflows"
 - JD says "RL environments" and CV says "optimization on complex landscapes" → rewrite as "RL-inspired optimization across simulation environments"
@@ -254,12 +287,56 @@ Three things, in this order:
 
 It is NOT a cover letter, NOT a mission statement, NOT a "why I'm excited" paragraph, and NOT a restatement of the CV.
 
+### Step 0: Mine before you write (mandatory pre-writing step)
+
+Do NOT draft a single word of the Summary until you have completed this extraction. Skipping it is the root cause of generic output.
+
+**0a. Check interview notes first.**
+Before touching the CV, read `interview_notes.md` for this application. Interview answers are first-class artifacts — the user may have described depth, scope, or outcomes that the CV does not expose. Add any usable claims from the interview into the candidate pool below. If there are no notes yet, proceed with the CV only.
+
+**0b. Extract the JD's single most load-bearing requirement.**
+One phrase. The thing the role cannot exist without. This becomes the anchor of S1.
+
+**0c. Build a candidate artifact pool from the CV and interview notes.**
+Scan every bullet in the CV and every answer in `interview_notes.md`. For each item that contains a number, a named system, a named outcome, or a named external user, add it to the pool. Mark each as:
+- (a) direct match to the load-bearing requirement
+- (b) adjacent
+- (c) unrelated
+
+Rank by specificity first, then JD relevance:
+
+| Rank | Artifact type |
+|------|--------------|
+| 1 | Specific number (%, $, count, latency, throughput) |
+| 2 | Named external users (companies, labs, open-source dependents) |
+| 3 | Named publication or venue (NeurIPS, ICML, CVPR, etc.) |
+| 4 | Named open-source project with measurable adoption (stars, forks, downloads) |
+| 5 | Named internal system with named downstream team or user count |
+| 6 | Named method or technique tied to a concrete outcome |
+| 7 | Named project with no quantification — use only if nothing above exists |
+
+**0d. Select exactly one artifact for S1 and one for S2.**
+- S1 artifact: the highest-ranked item from pool (a) or (b) that can be stated as a noun phrase. This must be the most JD-relevant item — not the first item in the CV.
+- S2 artifact: the highest-ranked item in the entire pool, regardless of JD relevance. The most impressive falsifiable proof point on the page. Must differ from S1.
+
+**0e. Scope signal for S1: prefer scope over years when scope is more impressive.**
+The S1 template includes `<X years / scope>`. Use whichever is stronger:
+- Years of experience: use only when the number itself signals seniority (7+) or when scope data is unavailable.
+- Scope: use when it is more impressive than years — e.g., "serving 50M users", "across three production ML teams", "deployed to 30 enterprise clients". Scope beats years almost every time for mid-career candidates.
+- When both are strong, prefer scope: `<Role> with <scope> building <artifact>` reads more concretely than `<Role> with N years building <artifact>`.
+
+**0f. If the pool has fewer than two distinct artifacts at rank 1-5:**
+The CV is thin for this JD. Do not invent. Surface this to the user before writing:
+> "I don't see strong proof points for [load-bearing requirement]. The strongest thing I found is [best pool item]. Can you tell me about any work in that area I can add? Even an unfinished project, a course project, or adjacent work counts if it's real."
+
+Only after steps 0a-0f are complete, proceed to draft.
+
 ### Structural formula
 
 **Exactly 2 to 3 sentences. 45 to 70 words total.** Longer than that and it stops being a summary.
 
-- **S1 (Positioning + headline artifact):** `<Role archetype> with <X years / scope> building <the single most JD-relevant thing> in <domain(s)>.` Leads with the hard or unique part, never with "passionate", "motivated", "excited", or "seeking".
-- **S2 (Proof):** A specific artifact, system, or result from the CV, stated concretely. Name the thing. Prefer a number, a named system, or a named outcome over an abstract claim. This sentence must be something a skeptical reader can later verify by reading the CV body.
+- **S1 (Positioning + scope/years + headline artifact):** `<Role archetype> with <scope or X years> building <S1 artifact from pool> in <domain(s)>.` Leads with the hard or unique part, never with "passionate", "motivated", "excited", or "seeking". The artifact must be the highest-ranked JD-relevant item from the pool — not the first item you find.
+- **S2 (Proof):** State the S2 artifact concretely. Name the thing. Must include at least one of: a specific number, a named external user, a named venue, or a named open-source project with adoption signal. This sentence must be verifiable against the CV body or interview notes.
 - **S3 (optional, only if it adds a new signal):** A second depth marker the JD cares about (e.g., shipped open source used by others, peer-reviewed publications, specific stack depth). Cut S3 entirely if it would repeat S1 or S2.
 
 ### Hard bans (do not write these)
@@ -271,6 +348,7 @@ It is NOT a cover letter, NOT a mission statement, NOT a "why I'm excited" parag
 | **Cover-letter closer** | "Targeting generative AI for protein structure on NVIDIA's PyTorch and CUDA stack." | "Targeting" is a cover-letter verb. The Summary describes who the user is, not what they are applying for. |
 | **Meta-framing** | "Researcher applying to the Anthropic Fellows Program..." / "...suited to a Forward Deployed Engineer role with direct client delivery." | The reader already knows which role this is. Restating it wastes the most valuable line on the page. |
 | **Vague scope claim** | "Engineer working across AI, HPC, and data..." | "Working across" means nothing. Replace with the most JD-relevant concrete artifact. |
+| **Years as the only signal** | "Engineer with 4 years of experience in machine learning." | Years alone prove nothing. Always pair with a concrete artifact or scope. |
 
 **Also banned outright:**
 - First-person pronouns ("I", "I'm", "my"). Summary is third-person implied-subject, same as the rest of the CV.
@@ -280,7 +358,7 @@ It is NOT a cover letter, NOT a mission statement, NOT a "why I'm excited" parag
 
 ### The falsifiability test
 
-Before saving, read each sentence and ask: **"Is there a concrete claim here that a skeptical reader could fact-check against the CV body?"** If the answer is no for any sentence, rewrite or cut it.
+Before saving, read each sentence and ask: **"Is there a concrete claim here that a skeptical reader could fact-check against the CV body or interview notes?"** If the answer is no for any sentence, rewrite or cut it.
 
 Also ask: **"Would this sentence be true of 10,000 other applicants to this role?"** If yes, it is filler. Replace with something specific: a named project, a number, a specific stack, or a named outcome.
 
@@ -300,28 +378,68 @@ Problems: meta-framing ("applying to"), banned phrases ("strong background", "pr
 **After (correct)**:
 > Data platform engineer with five years building streaming Kafka pipelines and a Python feature-store layer serving two ML teams. Shipped an internal evaluator for retrieval-augmented LLM assistants that cut review time by 40 percent, with the whole stack open-sourced under Apache 2.0.
 
-- S1: positioning + scope + JD-relevant artifact (streaming pipelines, feature store).
+- S1: positioning + years (5 is not exceptional, but scope "serving two ML teams" strengthens it) + JD-relevant artifact (Kafka pipelines, feature store).
 - S2: named result (40 percent), named artifact (open-source evaluator), JD keyword surface (retrieval-augmented LLM).
 - No "excited", no "applying to", no first-person.
 
 **Before (failed)** — ML Research Engineer JD:
 > Empirical researcher applying to BigLab's ML Research team with years of ML experience, passionate about foundation models, motivated to push frontier AI systems forward.
 
-Problems: every sentence is mission statement or meta-framing.
+Problems: every sentence is mission statement or meta-framing. "Years of ML experience" is years-as-only-signal.
 
 **After (correct)**:
 > ML research engineer with six years across supervised fine-tuning, reinforcement learning from human feedback (RLHF), and open-source reproduction of published benchmarks. Author of three NeurIPS papers on small-model distillation and maintainer of an evaluation harness used by two external labs for foundation-model regression testing.
 
-- S1: concrete methods (SFT, RLHF), open-source reproduction as a falsifiable claim.
-- S2: named venue (NeurIPS), named artifact (evaluation harness), named downstream users (two external labs).
+- S1: concrete methods (SFT, RLHF), open-source reproduction as a falsifiable claim. Six years paired with concrete methods, not left naked.
+- S2: named venue (NeurIPS), named artifact (evaluation harness), named downstream users (two external labs). Rank-2 and rank-3 artifacts both present.
+
+**Example 3 (thin CV, junior / career-change candidate)** — Backend Engineer JD, candidate has 1.5 years experience and no production metrics:
+
+Pool after 0c: two items at rank 5 (named projects, no numbers), one item at rank 6 (named method). No rank 1-4 items. Step 0f triggers — ask the user before writing.
+
+After user provides context ("the API I built is used by three other teams at my company, roughly 200 internal users"):
+
+> Backend engineer with two years building REST APIs and async job queues in Python and FastAPI. Designed an internal notification service now used by three teams across 200 employees, replacing a manual Slack-based process.
+
+- S1: scope injected from interview notes ("used by three teams"), not invented.
+- S2: named artifact + named users (200 employees) + named outcome (replaced manual process). Thin CV, but two falsifiable claims.
+- No numbers were fabricated. The scope came from the user.
+
+### Draft → critique → rewrite protocol (mandatory)
+
+After writing the first draft, do NOT save it. Run this critique pass before saving anything:
+
+1. **Read each sentence as a skeptical recruiter.** For each sentence ask: "What specific thing is this person claiming, and where in the CV or interview notes can I verify it?" If the answer is "nowhere" or "it's vague", the sentence fails.
+2. **Apply the 10,000-applicant test** to every phrase: "Would this phrase appear in 10,000 other summaries for this role?" If yes, replace it with something that names a specific project, number, stack, or outcome.
+3. **Check S1**: Does it name a concrete artifact (tool, system, method, project) — not just a domain ("AI", "data", "software")? If S1 says "building AI systems", it fails. It must say something like "building a Kafka-backed feature store" or "training RLHF reward models".
+4. **Check S2**: Does it contain at least one rank-1 through rank-4 artifact from the pool? If not, go back to the pool and pick a stronger artifact. A rank-7 artifact in S2 is a last resort only.
+5. **Check scope vs. years**: Is `<X years>` in S1 the only scope signal? If yes and the candidate has under 7 years, replace or augment with a concrete scope phrase.
+6. **Audit every phrase that contains no number and no named user.** For each such phrase ask: "Is this doing positioning, proof, or keyword work?" If the answer is none of those three, cut it. Implementation details — stack choices, tools used, infrastructure methods — are not proof unless the tool itself is the named artifact. They belong in bullets or Skills, not the Summary. A phrase like "running on SLURM multi-node clusters with MPI-parallelized algorithms" describes how something was built; it is not a proof of outcome and it passes the 10,000-applicant test for any HPC candidate. Cut it and use the freed words for a second rank-1 artifact instead.
+7. **Rewrite anything that fails.** The first draft almost always has at least one sentence that fails step 2, 3, or 6. This is expected. Rewrite before proceeding.
+
+### Advisor gate: Summary-specific checks
+
+When the advisor reviews the tailored CV, it must explicitly check these three failure modes in the Summary — not just a general read:
+
+1. **S1 artifact test**: Does S1 contain a concrete named artifact (not just a domain or function)? Flag if not.
+2. **S2 specificity test**: Does S2 contain a number, named external user, named venue, or named open-source project? Flag if not.
+3. **Banned phrase scan**: Grep S1+S2+S3 for every banned verb and phrase listed above. Flag any match.
+
+If any flag is raised, the advisor must propose a rewrite — not just note the issue.
 
 ### Verification checklist (before advisor gate)
 
+- [ ] Interview notes checked (step 0a) before touching the CV.
+- [ ] Pre-writing extraction (step 0b-0f) completed — artifact pool built and ranked before drafting.
+- [ ] S1 uses scope (or years paired with a concrete artifact) — not years alone.
+- [ ] S1 names a concrete artifact, not just a domain or function.
+- [ ] S2 contains a rank-1 through rank-4 artifact (number, named external user, named venue, or named open-source project with adoption).
+- [ ] Draft → critique → rewrite pass completed — including phrase audit (no implementation details without a proof outcome).
 - [ ] 2 to 3 sentences, 45 to 70 words.
 - [ ] No banned verbs or phrases (grep the list above).
 - [ ] No first-person pronouns.
 - [ ] No target-company or target-role name inside the Summary.
-- [ ] Every sentence passes the falsifiability test.
+- [ ] Every sentence passes the falsifiability test against the CV body or interview notes.
 - [ ] 3 to 5 JD keywords present, all legitimately reformulating real experience.
 - [ ] Inline style includes `text-align:justify;`.
 - [ ] No em-dashes, en-dashes, or double-hyphens.
@@ -332,14 +450,43 @@ Problems: every sentence is mission statement or meta-framing.
 
 This is not a user-facing command. It runs as part of the full pipeline after the interview answers are collected.
 
-1. Read the canonical CV at `{{paths.base_cv}}`.
-2. Rewrite the Professional Summary following the **Professional Summary Spec** below. The Summary `<div>` must include `text-align:justify;` in its inline style. Verify after writing.
-3. Reorder Selected Open Source Projects (or equivalent section) so the most JD-relevant project leads. Rewrite each bullet to lead with the hard or unique architectural choice (two lines max).
-4. Reorder Technical Skills categories so the JD-relevant category leads. Only include terms honestly demonstrated in the projects or experience.
-5. Reorder Experience bullets by relevance to the JD. Reformulate using JD vocabulary where truthful.
-6. Inject JD keywords naturally into existing achievements. Never invent.
-7. Create the application folder at `{{paths.applications_dir}}/preparing/<Company>_<Role>_<YYYY-MM-DD>/`. New applications always start in `preparing/`. Once the user confirms submission, move the folder to `{{paths.applications_dir}}/submitted/` and update `README.md` Application Status.
-8. Save HTML to `<app-dir>/cv_tailored.html`.
+1. Read the canonical CV at `{{paths.base_cv}}` and `interview_notes.md` (if it exists).
+2. Rewrite the Professional Summary following the **Professional Summary Spec** (below). The Summary `<div>` must include `text-align:justify;` in its inline style. Verify after writing.
+3. Reorder and rewrite Experience and Projects bullets following the **Bullet Rewriting Protocol** (below).
+4. Reorder Technical Skills categories so the JD-relevant category leads. Only include terms honestly demonstrated in the projects or experience sections. Remove any term that appears nowhere in the CV body.
+5. Run the filler scan (see Writing Rules) against the full draft. Fix every match before proceeding.
+6. Create the application folder at `{{paths.applications_dir}}/preparing/<Company>_<Role>_<YYYY-MM-DD>/`. Write `README.md` with the application metadata block (see Tracker spec). New applications always start in `preparing/`.
+7. Save HTML to `<app-dir>/cv_tailored.html`.
+
+### Bullet Rewriting Protocol
+
+This applies to every bullet in Experience and Projects. Do not rewrite bullets mechanically — rewrite each one through the decision lens below.
+
+**Step B0 — Read the bullet and the interview notes together.**
+Check whether the interview surfaces any additional specifics for this role or project that are not yet in the bullet. If yes, incorporate them (with user confirmation if they contradict the CV).
+
+**Step B1 — Apply the decision test.**
+For every bullet ask: "What decision did this person make that a different engineer might have made differently?" That decision is the lead of the rewritten bullet. If no decision is visible, ask: "What broke, and what did they change to fix it?" That failure-fix is the lead.
+
+If neither a decision nor a failure-fix is visible in the bullet or interview notes, rewrite at the level of specificity available and add `<!-- needs specifics -->`. Never fabricate.
+
+**Step B2 — Apply the 10,000-engineer test.**
+Read the rewritten bullet and ask: "Could this bullet appear on any engineer's CV at any company for this type of role?" If yes, it is still generic. Replace the subject or verb with something that names the specific system, constraint, or tradeoff.
+
+- Failing: "Designed a distributed caching system to improve API performance."
+- Passing: "Replaced a Redis cluster with a single-node Dragonfly instance after load testing revealed the cluster's cross-shard latency was the bottleneck, cutting API p99 from 340ms to 55ms under 10k concurrent users."
+
+**Step B3 — Reorder by JD relevance.**
+Within each role, move the most JD-relevant bullet to the first position. Within the full CV, move the most JD-relevant role or project section to lead its section. Do not reorder across sections — Education, Experience, Projects order is fixed.
+
+**Step B4 — Inject JD keywords.**
+Use the JD vocabulary to reformulate existing bullets where truthful. Never inject a keyword into a bullet where the underlying experience doesn't match. Examples are in the Writing Rules section.
+
+**Bullet format rules (non-negotiable):**
+- Two lines max. If it runs to three lines, split or compress.
+- Lead with an action verb. No two consecutive bullets in the same role may start with the same verb.
+- No passive voice when active works.
+- Include at least one specific: a number, a named tool, a named system, or a named outcome. A bullet with none of these is not done.
 
 ---
 
@@ -349,12 +496,19 @@ This is not a user-facing command. It runs automatically at the start of every p
 
 1. If the input is a URL, delegate fetch to a Haiku sub-agent (`Agent` tool, `model: "haiku"`). Ask for the full JD text and company name. If fetch fails, ask the user to paste the JD text directly.
 2. Extract 15 to 20 hard requirements and keywords from the JD text.
-3. Read the canonical CV at `{{paths.base_cv}}`. For each hard requirement, mark as **clear match**, **adjacent**, or **gap**. A gap that is a hard blocker (e.g., required credential or years of experience the candidate clearly lacks) surfaces a one-line note to the user before proceeding.
+3. Read the canonical CV at `{{paths.base_cv}}`. For each hard requirement, mark as **clear match**, **adjacent**, or **gap**. Then classify every gap by severity and handle it as follows:
+
+   | Gap tier | Definition | Action |
+   |----------|-----------|--------|
+   | **Hard blocker** | A required credential, license, or qualification the candidate clearly cannot claim (e.g., "must have active security clearance", "CPA required", "PhD required" when candidate has a BS) | Stop. Ask the user via `AskUserQuestion`: "This JD requires [X] which isn't on your CV. Do you want to proceed anyway, or skip this application?" Options: proceed (I'll explain in cover letter), skip this one. Do not continue until answered. |
+   | **Soft blocker** | Years of experience significantly under requirement, or a primary technical skill that is absent but learnable (e.g., JD requires 5 years, CV shows 2) | Note it in a single line, continue. Make it Q2 in the interview (the biggest gap question). Surface it in the defend report as a "prepare to address" item. |
+   | **Non-blocking gap** | A nice-to-have the candidate lacks, or a secondary skill not central to the role | Note silently. Use it to shape one interview question if relevant. Do not surface it to the user unprompted. |
+
 4. Detect archetype from the `archetypes:` block in config (or defaults). This shapes Summary framing and Skills reorder in the tailoring step.
 5. Detect company location to set page format: Letter (US, Canada) or A4 (elsewhere).
 6. Feed the keyword list, gap map, and archetype into the interview questions (Phase 0) and the tailoring step.
 
-No report is produced. No score is shown. This step exists to give the interview and tailoring steps the information they need.
+No score is shown. No full report is produced. This step exists purely to give the interview and tailoring steps the information they need.
 
 ---
 
@@ -427,15 +581,33 @@ Use this command to recompile an existing `cv_tailored.html` after a manual edit
 
 ## Mode: respond (Application essay answers)
 
-When a JD or application form asks a written question (e.g., "Why are you a strong fit?"), draft the answer following these rules:
+When a JD or application form asks a written question (e.g., "Why are you a strong fit?"), run this pipeline before drafting a word.
 
-1. Open with a single lead sentence that summarizes the whole answer. If the reader stops there, they still get the thesis.
-2. Paragraph 2: open with the problem or topic itself, not a label. Bad: "The technical problem I care about is...". Good: "Runtime workflow synthesis under a safety boundary is where I think the real problem sits."
-3. Paragraph 3: open with lived experience, not a label. Bad: "A concrete example from my own work:". Good: "I've already pushed on this with a local-first agent I built that..."
-4. Target 250 to 350 words unless the form specifies otherwise.
-5. Save to `<app-dir>/application_response.md`.
-6. Apply all global writing rules: no em-dashes, no filler, no label transitions, lead with the hard part.
-7. Run the same advisor gate described in `pdf` step 13 on the response before saving. If advisor is unavailable, self-audit against the writing ban list and dash rule.
+### Step R0: Mine before you write (mandatory)
+
+1. **Identify the essay question's core ask.** Strip it down to one phrase: what is the reader actually trying to learn? "Why are you a strong fit?" = "What specific thing have you built that maps to our core problem?" "Tell us about a technical challenge" = "Show us how you reason under pressure."
+2. **Find the single best anchor artifact.** Scan `cv_tailored.html` and `interview_notes.md`. Pick the one project, role, or result that most directly answers the core ask. This becomes the anchor for the entire response. If two artifacts are equally strong, pick the one with a number.
+3. **Draft the thesis in one sentence before writing anything else.** The thesis is: "[Anchor artifact] is why I'm a strong fit for [core ask]." If you cannot write this sentence concretely, the anchor is wrong — pick again.
+
+### Structure and word budget
+
+**Target: 250 to 350 words** unless the form specifies otherwise. Allocate the budget as follows:
+
+| Paragraph | Purpose | Word budget |
+|-----------|---------|-------------|
+| **P1 — Lead** | One sentence that is the thesis. Reader stops here and still gets the full answer. | 30 to 50 words |
+| **P2 — Technical argument** | Open with the problem or domain itself, not a label. State the hard or non-obvious aspect of the problem. No "The technical challenge I care about is..." — open with the challenge. | 90 to 120 words |
+| **P3 — Lived example** | Open with the work, not a label. No "A concrete example from my work:" — open with the thing itself. Name the system, the decision, the outcome. At least one number or named artifact. | 80 to 100 words |
+| **P4 — Closer** (optional) | One sentence connecting back to the role. Cut if it reads as flattery or repeats P1. | 20 to 40 words |
+
+### Rules
+
+1. P2 opens with the domain problem, not with "I" or a label transition.
+2. P3 opens with the artifact or the decision, not with "For example" or "In my work".
+3. Apply all global writing rules: no em-dashes, no filler, no label transitions.
+4. Run the filler scan (Writing Rules) against the draft before saving.
+5. Run the advisor gate (or self-audit) before saving.
+6. Save to `<app-dir>/application_response.md`.
 
 ---
 
@@ -477,22 +649,43 @@ The whole kairos discipline is "every claim on the page is falsifiable." `defend
 
 ---
 
+## Application folder README format
+
+Every application folder created by the pipeline must contain a `README.md` with exactly this header block. The tracker depends on this schema — do not change the key names.
+
+```markdown
+# Application: <Company> — <Role>
+
+- **Company**: <Company>
+- **Role**: <Role>
+- **Date created**: <YYYY-MM-DD>
+- **Date submitted**: <YYYY-MM-DD or blank>
+- **Status**: <Preparing | Submitted | Interviewing | Offer | Rejected | Withdrawn>
+- **PDF**: <filename.pdf or blank>
+- **Page format**: <Letter | A4>
+- **Hard blockers noted**: <yes | no>
+- **Defend report**: <defend_report.md or blank>
+```
+
+The pipeline writes this block when creating the folder (Tailor CV step 6). Update `Date submitted` and `Status` when the user confirms submission. The tracker reads only these keys — nothing else in the README is parsed.
+
 ## Mode: tracker (Application Status)
 
-Read all subdirectories under `{{paths.applications_dir}}/preparing/` and `{{paths.applications_dir}}/submitted/`.
-For each, read `README.md` and extract Application Status.
+Read all subdirectories under `{{paths.applications_dir}}/preparing/` and `{{paths.applications_dir}}/submitted/`. For each, parse the README header block above. If a README is missing or malformed, show the folder name with status "README missing" rather than failing silently.
 
 Display two tables, one per tier:
 
 ### Preparing
-| Company | Role | Date Created | Status | PDF |
-|---------|------|-------------|--------|-----|
-| ... | ... | ... | ... | yes or no |
+| Company | Role | Date Created | Status | PDF | Blockers |
+|---------|------|-------------|--------|-----|---------|
+| ... | ... | ... | ... | yes / no | yes / no |
 
 ### Submitted
-| Company | Role | Date Applied | Status | PDF |
-|---------|------|-------------|--------|-----|
-| ... | ... | ... | ... | yes or no |
+| Company | Role | Date Submitted | Status | PDF | Defend |
+|---------|------|---------------|--------|-----|--------|
+| ... | ... | ... | ... | yes / no | yes / no |
+
+After the tables, show a one-line count: `<N> preparing, <M> submitted, <K> with open defend items`.
 
 ---
 
