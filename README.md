@@ -83,7 +83,7 @@ Paste a job description (or a URL) into Claude Code. kairos runs:
 
 ```bash
 # 1. Clone into your Claude skills directory (available across all projects)
-git clone https://github.com/melrefaiy2018/kairos.git ~/.claude/skills/kairos
+git clone https://github.com/mohamedelrefaiy/kairos.git ~/.claude/skills/kairos
 
 # 2. Install Playwright
 npm install -g playwright && npx playwright install chromium

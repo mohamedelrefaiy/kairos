@@ -18,13 +18,13 @@ Claude Code automatically discovers skills placed under `~/.claude/skills/` (ava
 For global use across all projects:
 
 ```bash
-git clone https://github.com/melrefaiy2018/kairos.git ~/.claude/skills/kairos
+git clone https://github.com/mohamedelrefaiy/kairos.git ~/.claude/skills/kairos
 ```
 
 For a single project only:
 
 ```bash
-git clone https://github.com/melrefaiy2018/kairos.git .claude/skills/kairos
+git clone https://github.com/mohamedelrefaiy/kairos.git .claude/skills/kairos
 ```
 
 Claude Code picks up the skill on the next session automatically - no restart, no registration step.
