@@ -45,7 +45,7 @@ Run this silently in the background. Never block the pipeline for it.
 > - "Yes, update now"
 > - "Not now"
 
-If confirmed: run `git -C ~/.claude/skills/kairos pull origin main` and report what changed (the commit messages from the pulled commits). If the pull fails, show the error and suggest the user run it manually.
+If confirmed: first check the install is a git clone (`git -C ~/.claude/skills/kairos rev-parse --git-dir`). If it is, run `git -C ~/.claude/skills/kairos pull origin main` and report what changed (the commit messages from the pulled commits); if the pull fails, show the error and suggest the user run it manually. If it is NOT a git clone (installed via `npx skills add`), do not attempt git: tell the user to run `npx skills update kairos` instead.
 
 ### Step 1: Locate or create config
 
@@ -281,7 +281,10 @@ Before saving any HTML, markdown, or text output, run this grep against the full
 grep -inE "passionate|results.oriented|detail.oriented|proven track record|leverag|spearhead|orchestrat|facilitat|foster(ed|ing)|honed|delv(e|ed|ing)|showcas|underscor|bolster|garner|harness(ed|ing)|cultivat|empower|championed|seamless|cutting.edge|robust|dynamic|pivotal|meticulous|transformative|multifaceted|innovative|vibrant|unwavering|synergies|tapestry|testament|game.chang|thought leader|intersection of|fast.paced|serves as|stands as|boasts|functions as|directly aligned|demonstrating commitment|directly transferable|excited to|motivated by|seeking to|looking to|eager to|strong background|deep expertise|combining .+ with" <output-file>
 
 # Cadence lint: participial benefit tails (match = rewrite unless the clause carries a number or named system)
-grep -inE ", (driving|improving|enhancing|enabling|ensuring|boosting|streamlining|strengthening|increasing|reducing|accelerating|delivering|resulting in|contributing to|showcasing|demonstrating|highlighting|underscoring)" <output-file>
+grep -inE ", (driving|improving|enhancing|enabling|ensuring|boosting|streamlining|strengthening|increasing|reducing|accelerating|delivering|resulting in|contributing to|showcasing|demonstrating|highlighting|underscoring|allowing|making|helping|letting|saving|freeing|paving)" <output-file>
+
+# Suspect-verb check: every match must have a named object AND a number in the same bullet, or be rewritten
+grep -inE "optimiz|streamlin|enhanc|improv(ed|ing)|drove|driving" <output-file>
 ```
 
 Every lexical match must be removed or rewritten before saving, unless it is a genuine technical term ("dynamic programming", "robust statistics"). Every cadence match must be rewritten unless the trailing clause contains a specific number or named system. For HTML artifacts, these rules apply to rendered prose only: matches inside `<style>` blocks, inline `style` attributes, or tag markup are not violations. This applies to verbatim user quotes as well: if a quoted phrase contains a banned term, do not preserve it in the output file — not even inside an HTML comment. Paraphrase, summarize, or omit it instead.
@@ -356,6 +359,8 @@ Only after steps 0a-0f are complete, proceed to draft.
 ### When to skip the Summary entirely
 
 A Summary must earn its place. For candidates with under ~3 years of experience and a linear, self-explanatory history (one track, obvious fit), the first Experience bullet often says everything a Summary would — ask the user via `AskUserQuestion` whether to skip it and lead with Education or Experience. Keep the Summary when the candidate is mid-career (3+ years), changing tracks, or has a scattered history the reader needs help parsing.
+
+If the user opts to skip: omit the Professional Summary section from the tailored CV entirely (section order continues from Education), skip Tailor CV step 2, and skip every Summary-specific item in the verification checklist and advisor gate. The rest of the pipeline is unchanged.
 
 ### Structural formula
 
@@ -593,7 +598,7 @@ Use this command to recompile an existing `cv_tailored.html` after a manual edit
 ### Section order (lock to the canonical CV)
 
 1. Header (name, contact row)
-2. Professional Summary
+2. Professional Summary (omitted when the user opted out — see When to skip the Summary)
 3. Education
 4. Selected Open Source Projects (or equivalent)
 5. Experience
@@ -620,7 +625,7 @@ Use this command to recompile an existing `cv_tailored.html` after a manual edit
 
 **Section headers:** ALL CAPS. Use standard names where possible: EDUCATION, EXPERIENCE, PROJECTS, PUBLICATIONS, SKILLS.
 
-**Keywords:** Distribute across Summary (top 5 keywords), first bullet of each role, and Skills. Use exact JD vocabulary in context. Spell out acronyms on first use: "Large Language Model (LLM)". Include the exact job title somewhere in the resume.
+**Keywords:** Distribute across Summary (top 5 keywords), first bullet of each role, and Skills. Use exact JD vocabulary in context. Spell out an acronym on first use only when the JD itself spells it out ("Large Language Model (LLM)"); jargon the target reader uses casually (k8s, p99, CI) stays casual, per the cadence rules. Include the exact job title somewhere in the resume.
 
 **Content:** UTF-8 selectable text only. No images of text. No misspellings. Length is not penalized by ATS. Keep to 2 pages for human readability.
 

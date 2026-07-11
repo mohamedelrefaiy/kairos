@@ -54,7 +54,10 @@ Before saving any HTML, markdown, or text output, run this grep against the full
 grep -inE "passionate|results.oriented|detail.oriented|proven track record|leverag|spearhead|orchestrat|facilitat|foster(ed|ing)|honed|delv(e|ed|ing)|showcas|underscor|bolster|garner|harness(ed|ing)|cultivat|empower|championed|seamless|cutting.edge|robust|dynamic|pivotal|meticulous|transformative|multifaceted|innovative|vibrant|unwavering|synergies|tapestry|testament|game.chang|thought leader|intersection of|fast.paced|serves as|stands as|boasts|functions as|directly aligned|demonstrating commitment|directly transferable|excited to|motivated by|seeking to|looking to|eager to|strong background|deep expertise|combining .+ with" <output-file>
 
 # Cadence lint: participial benefit tails (match = rewrite unless the clause carries a number or named system)
-grep -inE ", (driving|improving|enhancing|enabling|ensuring|boosting|streamlining|strengthening|increasing|reducing|accelerating|delivering|resulting in|contributing to|showcasing|demonstrating|highlighting|underscoring)" <output-file>
+grep -inE ", (driving|improving|enhancing|enabling|ensuring|boosting|streamlining|strengthening|increasing|reducing|accelerating|delivering|resulting in|contributing to|showcasing|demonstrating|highlighting|underscoring|allowing|making|helping|letting|saving|freeing|paving)" <output-file>
+
+# Suspect-verb check: every match must have a named object AND a number in the same bullet, or be rewritten
+grep -inE "optimiz|streamlin|enhanc|improv(ed|ing)|drove|driving" <output-file>
 ```
 
 Every lexical match must be removed or rewritten before saving, unless it is a genuine technical term ("dynamic programming", "robust statistics"). Every cadence match must be rewritten unless the trailing clause contains a specific number or named system. For HTML artifacts, these rules apply to rendered prose only: matches inside `<style>` blocks, inline `style` attributes, or tag markup are not violations. This applies to verbatim user quotes as well: if a quoted phrase contains a banned term, do not preserve it in the output file, not even inside an HTML comment. Paraphrase, summarize, or omit it instead.
