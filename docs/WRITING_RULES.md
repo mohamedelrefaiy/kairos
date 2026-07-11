@@ -56,7 +56,9 @@ grep -inE "passionate|results.oriented|detail.oriented|proven track record|lever
 # Cadence lint: participial benefit tails (match = rewrite unless the clause carries a number or named system)
 grep -inE ", (driving|improving|enhancing|enabling|ensuring|boosting|streamlining|strengthening|increasing|reducing|accelerating|delivering|resulting in|contributing to|showcasing|demonstrating|highlighting|underscoring|allowing|making|helping|letting|saving|freeing|paving)" <output-file>
 
-# Suspect-verb check: every match must have a named object AND a number in the same bullet, or be rewritten
+# Suspect-verb check (review trigger, not auto-reject): verb uses need a named
+# object AND a number in the same bullet; noun uses ("Bayesian optimization")
+# and project names ("streamline-py") are exempt
 grep -inE "optimiz|streamlin|enhanc|improv(ed|ing)|drove|driving" <output-file>
 ```
 
