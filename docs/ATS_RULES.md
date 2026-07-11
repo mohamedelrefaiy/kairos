@@ -13,7 +13,7 @@ Applicant Tracking Systems (ATS) are the first reader of your CV. kairos enforce
 - **No accented characters or special characters.** Use *resume* not *résumé*.
 - **No credentials next to the name.** No `PhD`, `MBA`, etc. next to the candidate's name in the header.
 - **No punctuation in the name line.** No `( ) , / -` in the `<h1>`.
-- **Proper capitalization and punctuation throughout.**
+- **Proper capitalization and punctuation throughout.** Deliberate Summary fragments (see the Summary spec's Register rules) are fine: they capitalize normally and end with a period, which is all ATS parsers and recruiters check.
 
 ## Dates
 

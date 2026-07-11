@@ -33,7 +33,7 @@ Same candidate, same Job Description (Data Platform Engineer). The Summary is th
 > Experienced engineer applying to a Data Platform role, with a strong background in distributed systems and a proven track record of building scalable pipelines. Passionate about leveraging AI to drive internal tooling improvements.
 
 **After** (kairos):
-> Data platform engineer with five years building streaming Kafka pipelines and a Python feature store serving two in-house ML teams, with open-source contributions to a widely used retrieval library. Shipped an internal evaluator for retrieval-augmented Large Language Model (LLM) assistants that cut review time by 40 percent across forty daily queries, with the whole stack open-sourced under Apache 2.0.
+> Data platform engineer, five years on streaming Kafka pipelines and a Python feature store used by two in-house ML teams. Built an internal evaluator for retrieval-augmented Large Language Model (LLM) assistants that cut review time by 40 percent. The whole stack is open source under the Apache 2.0 license.
 
 Everything in the *after* is a real, verifiable claim that a skeptical reader can fact-check against the CV body. Nothing in the *before* is. The bullets, the section order, and the keyword injections in the tailored CV go through the same review.
 

@@ -18,7 +18,7 @@ Never use em-dashes (`—`) or en-dashes (`–`) anywhere in any output. Hyphens
   - **Adjectives**: seamless, cutting-edge, robust, dynamic, pivotal, meticulous, transformative, multifaceted, innovative, comprehensive, vibrant, unwavering, results-oriented, detail-oriented, fast-paced.
   - **Nouns and phrases**: synergies, tapestry, testament, game-changer, thought leader, "at the intersection of", "passionate about", "proven track record", "directly aligned with", "demonstrating commitment to", "directly transferable to".
   - **Copula avoidance**: "serves as", "stands as", "boasts", "functions as". Write "is", "has", "built".
-  - Technical-term exception: a match that is a genuine technical term ("dynamic programming", "robust statistics", "dynamic dispatch") is exempt. Everything else is a rewrite, not a judgement call.
+  - Technical-term exception: a match that is an established technical term of art ("dynamic programming", "robust statistics", "dynamic typing", "dynamic dispatch") is exempt. Marketing uses ("robust platform", "dynamic environment") are always rewrites.
 - Use suspect verbs without a specific object and a number in the same bullet: "optimized", "streamlined", "enhanced", "drove", "improved". These are legal only as "optimized <named thing> by <number>": "optimized the ingest path, cutting cold-start from 9s to 2s" passes; "optimized system performance" never does.
 - Use label-style transitions in prose: *A concrete example from my own work:*, *The technical problem I care about:*, *In summary:*. Open paragraphs with the thing itself.
 - Write bullets any engineer could dismiss as "anyone can do that with a cron job". If a bullet describes a schedule or a mechanical step, rewrite to lead with the hard or unique architectural choice.
@@ -40,10 +40,10 @@ Recruiters report spotting AI-written CVs by rhythm before vocabulary. A documen
 1. **No generic participial tails.** A sentence or bullet must not end in a comma plus "-ing" benefit clause: ", improving efficiency and reliability", ", driving impact", ", ensuring scalability". This `verb + object + gerund-benefit` template is the single strongest LLM fingerprint. Exception: a trailing "-ing" clause that carries a specific number or named system ("cutting p99 latency from 340ms to 55ms") is allowed, at most once per role.
 2. **Vary sentence and bullet shape.** Within one role, bullets must not all follow the identical "Verb + object + metric" skeleton, and must visibly differ in length. In prose (Summary, responses), two adjacent sentences must not share the same grammatical skeleton; sentence lengths should differ noticeably (rule of thumb: 8+ words apart, or one is a fragment). Human writing is uneven. Uniform polish is the tell.
 3. **One triad maximum.** At most one "X, Y, and Z" list per Summary or paragraph. Never two consecutive sentences that each carry a list. The rule-of-three tic is a documented LLM fingerprint.
-4. **Real numbers, not marketing numbers.** Use the exact figure the user gave: "31.4 percent", "from 340ms to 55ms", "43 daily queries". Never round for polish, never invent a rounder-sounding number. If every number in a draft is a multiple of ten, ask the user for exact values before saving.
+4. **Real numbers, not marketing numbers.** Use the exact figure the user gave: "31.4 percent", "from 340ms to 55ms", "43 daily queries". Never round for polish, never invent a rounder-sounding number. If every number in a draft is a multiple of ten, ask the user for exact values before saving (during tailoring; in a non-interactive recompile, note it in the report instead of blocking).
 5. **Casual jargon, engineer register.** Write jargon the way engineers write it: k8s, p99, CI, ETL. Do not define or soften terms the target reader knows. Spell out an acronym only when the JD itself spells it out, and only on first use (ATS rule).
 6. **At most one "with" chain per sentence.** "with five years building X ... with contributions to Y" comma-chain stacking is LLM expansion. Split into a new sentence instead.
-7. **Semicolons: one per document maximum.** Heavy semicolon rhythm is a reported AI tell (dashes are already banned outright).
+7. **Semicolons: one per document maximum.** Heavy semicolon rhythm is a reported AI tell (dashes are already banned outright). Counts prose text only: CSS, inline `style` attributes, and HTML markup are exempt.
 
 ## Filler scan (run before saving any output artifact)
 
@@ -57,7 +57,7 @@ grep -inE "passionate|results.oriented|detail.oriented|proven track record|lever
 grep -inE ", (driving|improving|enhancing|enabling|ensuring|boosting|streamlining|strengthening|increasing|reducing|accelerating|delivering|resulting in|contributing to|showcasing|demonstrating|highlighting|underscoring)" <output-file>
 ```
 
-Every lexical match must be removed or rewritten before saving, unless it is a genuine technical term ("dynamic programming", "robust statistics"). Every cadence match must be rewritten unless the trailing clause contains a specific number or named system. This applies to verbatim user quotes as well: if a quoted phrase contains a banned term, do not preserve it in the output file, not even inside an HTML comment. Paraphrase, summarize, or omit it instead.
+Every lexical match must be removed or rewritten before saving, unless it is a genuine technical term ("dynamic programming", "robust statistics"). Every cadence match must be rewritten unless the trailing clause contains a specific number or named system. For HTML artifacts, these rules apply to rendered prose only: matches inside `<style>` blocks, inline `style` attributes, or tag markup are not violations. This applies to verbatim user quotes as well: if a quoted phrase contains a banned term, do not preserve it in the output file, not even inside an HTML comment. Paraphrase, summarize, or omit it instead.
 
 After the greps, do one manual pass the regex cannot catch: read the draft's sentences in sequence and check shape variance (cadence rule 2), triad count (rule 3), and round-number suspicion (rule 4).
 

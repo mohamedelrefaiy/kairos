@@ -19,3 +19,4 @@ package-lock.json
 
 # Generated PDFs in examples should not be checked in
 examples/*.pdf
+.gstack/

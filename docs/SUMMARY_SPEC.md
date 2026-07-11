@@ -66,7 +66,7 @@ A Summary must earn its place. For candidates with under ~3 years of experience 
 
 ## Structural formula
 
-**Exactly 2 to 3 sentences. 45 to 70 words total.** Longer than that and it stops being a summary. Thin-CV candidates (junior, career change) may land at 35 to 50 words, never pad a Summary with filler to reach the range.
+**Exactly 2 to 3 sentences. 45 to 70 words total.** Longer than that and it stops being a summary. Thin-CV candidates (junior, career change) may land at 35 to 50 words, never pad a Summary with filler to reach the range. Count words as whitespace-separated tokens: "40 percent" is two words, "feature-store" is one, "(RLHF)" is one.
 
 - **S1 (Positioning + scope/years + headline artifact):** `<Role archetype> with <scope or X years> building <S1 artifact from pool> in <domain(s)>.` Must name a concrete artifact — not just a domain ("AI", "data") but a named thing ("a Kafka-backed feature store", "RLHF reward models").
 - **S2 (Proof):** State the S2 artifact concretely. Must include at least one rank-1 through rank-4 artifact: a specific number, a named external user, a named venue, or a named open-source project with adoption signal. Falsifiable against the CV body or interview notes.
@@ -77,7 +77,7 @@ A Summary must earn its place. For candidates with under ~3 years of experience 
 Strong human-written summaries at this level are plain, declarative, and slightly dry, closer to "Senior engineer with 3 years at Amazon, promoted twice in 3 years" than to flowing prose. Enforce:
 
 - **Short declarative sentences.** 12 to 20 words is the natural range. Never one long sentence of stacked clauses.
-- **Fragment openers are allowed and often best.** "Data platform engineer, five years on Kafka streaming pipelines and a Python feature store." reads more human than a fully wound sentence with "with ... building ... serving" chained clauses.
+- **Fragment openers are allowed and often best.** "Data platform engineer, five years on Kafka streaming pipelines and a Python feature store." reads more human than a fully wound sentence with "with ... building ... serving" chained clauses. Fragments are deliberate style, not punctuation errors: capitalize normally and end with a period, which satisfies the ATS proper-punctuation rule.
 - **Adjacent sentences must differ in shape and length** (8+ words apart, or one is a fragment). Two polished 30-word sentences in a row is the classic generated-Summary rhythm.
 - **Zero non-technical adjectives.** "Streaming", "distributed", "asynchronous" are facts; "innovative", "robust", "comprehensive" are polish and banned.
 - **Keyword ceiling per sentence: 2.** The Summary carries 3 to 5 JD keywords total, but never more than two in one sentence. A Summary that mirrors the JD's own phrasing back at it reads as AI even when every claim is true.
@@ -150,6 +150,8 @@ Before saving, read each sentence and ask:
 
 ## Worked examples
 
+All three examples happen to use the 3-sentence form; two sentences is equally valid whenever S3 would repeat S1 or S2.
+
 ### Example 1: Strong CV, Data Platform Engineer JD
 
 **Before (failed):**
@@ -188,7 +190,7 @@ User provides: "The API I built is used by three other teams at my company, roug
 
 - S1: scope injected from interview notes ("used by three teams"), not invented.
 - S2: named artifact + named users (200 employees). S3 carries the outcome as its own short plain sentence, not as a ", replacing ..." participial tail.
-- 36 words total: under the standard range, which is correct for a thin CV. Never pad.
+- 35 words total: under the standard range, which is correct for a thin CV. Never pad.
 - No numbers were fabricated. The scope came from the user ("roughly 200" stays "roughly 200", do not sharpen it).
 
 See `examples/mohamed_ali_summary_annotated.md` for additional annotated walkthroughs.

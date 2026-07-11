@@ -23,7 +23,7 @@ npx skills add mohamedelrefaiy/kairos -g -a claude-code
 npx skills add mohamedelrefaiy/kairos -a claude-code
 ```
 
-Update later with `npx skills update kairos`. Note: npx installs are not git clones, so kairos's built-in `/kairos update` (git-based) will silently skip; use `npx skills update` instead.
+Update later with `npx skills update kairos`. Note: npx installs are not git clones, so the periodic git update check skips itself, and `/kairos update` will point you to `npx skills update kairos` instead.
 
 **Option B - git clone:** Claude Code automatically discovers skills placed under `~/.claude/skills/` (available across all your projects) or `.claude/skills/` inside a specific project folder.
 
