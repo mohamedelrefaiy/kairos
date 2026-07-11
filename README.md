@@ -2,7 +2,7 @@
   <img src="./assets/kairos-logo-light.png" alt="kairos logo" width="320" />
 </p>
 
-A Claude Code skill that turns a job description into a tailored, ATS-clean, advisor-reviewed CV PDF, without the AI-written smell. **kairos** (Greek: *the right moment to act*) is your career advisor: it converses with you about your real experience, maps it to the Job Description, and writes copy you can defend in an interview.
+A Claude Code skill that turns a job description into a tailored, ATS-clean, advisor-reviewed CV PDF, without the AI-written smell. **kairos** is your career advisor: it converses with you about your real experience, maps it to the Job Description, and writes copy you can defend in an interview.
 
 ---
 
