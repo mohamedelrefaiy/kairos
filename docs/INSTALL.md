@@ -1,15 +1,15 @@
 # Install
 
-kairos is a Claude Code skill. It runs inside Claude Code, uses native tools like `AskUserQuestion` and `Agent`, and generates PDFs via Playwright.
+kairos is an agent skill in the SKILL.md standard. It runs on **Claude Code** (its home turf, with native pickers and sub-agent routing) and on **OpenAI Codex CLI** and other SKILL.md-compatible agents (with documented fallbacks: prose questions instead of pickers, inline work instead of subagents). PDFs are generated via Playwright on every host.
 
 ## 1. Prerequisites
 
-- **Claude Code** (CLI, desktop app, or IDE extension). See https://claude.ai/code.
+- **Claude Code** (CLI, desktop app, or IDE extension, see https://claude.ai/code) **or Codex CLI** (`npm install -g @openai/codex`).
 - **Node.js 18+** and **npm** (for Playwright).
 - **Git** (to clone the repo and version your applications).
 
 Optional, improves quality:
-- **Claude Opus access** for the advisor gate. kairos degrades gracefully to a self-audit if Opus is not available.
+- **Claude Opus access** for the advisor gate (Claude Code). kairos degrades gracefully to a self-audit if Opus is not available - on Codex the self-audit path is the default.
 
 ## 2. Install the skill
 
@@ -19,13 +19,19 @@ Optional, improves quality:
 # global (all projects), Claude Code only
 npx skills add mohamedelrefaiy/kairos -g -a claude-code
 
+# Codex CLI
+npx skills add mohamedelrefaiy/kairos -g -a codex
+
+# both at once
+npx skills add mohamedelrefaiy/kairos -g -a claude-code -a codex
+
 # or project-only: drop the -g
 npx skills add mohamedelrefaiy/kairos -a claude-code
 ```
 
 Update later with `npx skills update kairos`. Note: npx installs are not git clones, so the periodic git update check skips itself, and `/kairos update` will point you to `npx skills update kairos` instead.
 
-**Option B - git clone:** Claude Code automatically discovers skills placed under `~/.claude/skills/` (available across all your projects) or `.claude/skills/` inside a specific project folder.
+**Option B - git clone:** Claude Code automatically discovers skills placed under `~/.claude/skills/` (available across all your projects) or `.claude/skills/` inside a specific project folder. Codex discovers skills under `~/.agents/skills/` (personal) or `.agents/skills/` in a project; clone there instead, or clone once for Claude Code and symlink: `ln -s ~/.claude/skills/kairos ~/.agents/skills/kairos`.
 
 For global use across all projects:
 
@@ -41,7 +47,7 @@ git clone https://github.com/mohamedelrefaiy/kairos.git .claude/skills/kairos
 
 A git clone enables the built-in update check (`/kairos update`).
 
-Either way, Claude Code picks up the skill on the next session automatically - no restart, no registration step.
+Either way, the skill is picked up on the next session automatically - no restart, no registration step. On Claude Code it activates when you paste a JD (or via `/kairos`); on Codex it activates the same way, or explicitly with `$kairos` in the session.
 
 ## 3. Install Playwright
 
@@ -102,7 +108,7 @@ If any step fails, file an issue with the full Claude Code transcript.
 
 ## Troubleshooting
 
-- **Skill not activating.** Check that `~/.claude/skills/kairos/SKILL.md` exists. Claude Code discovers skills by looking for `SKILL.md` in subdirectories of `~/.claude/skills/`.
+- **Skill not activating.** Check that `SKILL.md` exists in the install directory: `~/.claude/skills/kairos/` for Claude Code, `~/.agents/skills/kairos/` for Codex. Both hosts discover skills by scanning those directories for `SKILL.md`. On Codex, try explicit invocation with `$kairos`.
 - **"Playwright is not installed."** Run step 3 again. The script uses `require('playwright')` from your global `node_modules`.
 - **Advisor gate is silently skipped.** Expected on plans without Opus access. Set `advisor.enabled: false` in config to make the fallback explicit.
 - **Summary is over 70 words.** The self-audit should catch this. If it does not, file an issue.

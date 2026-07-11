@@ -2,7 +2,7 @@
   <img src="./assets/kairos-logo-light.png" alt="kairos logo" width="320" />
 </p>
 
-A Claude Code skill that turns a job description into a tailored, ATS-clean, advisor-reviewed CV PDF, without the AI-written smell. **kairos** is your career advisor: it converses with you about your real experience, maps it to the Job Description, and writes copy you can defend in an interview.
+An agent skill (Claude Code, OpenAI Codex CLI, and other SKILL.md-compatible hosts) that turns a job description into a tailored, ATS-clean, advisor-reviewed CV PDF, without the AI-written smell. **kairos** is your career advisor: it converses with you about your real experience, maps it to the Job Description, and writes copy you can defend in an interview.
 
 ---
 
@@ -83,7 +83,8 @@ Paste a job description (or a URL) into Claude Code. kairos runs:
 
 ```bash
 # 1. Install the skill (pick one)
-npx skills add mohamedelrefaiy/kairos -g -a claude-code            # via the agent-skills CLI
+npx skills add mohamedelrefaiy/kairos -g -a claude-code            # Claude Code
+npx skills add mohamedelrefaiy/kairos -g -a codex                  # Codex CLI
 git clone https://github.com/mohamedelrefaiy/kairos.git ~/.claude/skills/kairos   # or plain git
 
 # 2. Install Playwright

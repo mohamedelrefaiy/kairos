@@ -1,12 +1,21 @@
 ---
 name: kairos
-description: Career advisor skill for Claude Code. Evaluates job descriptions, runs an adaptive interview, tailors your CV (HTML + PDF), and drafts application responses with a writing discipline that does not read as AI-generated. When a user pastes a JD or URL, run the full pipeline end-to-end with zero manual steps.
+description: Career advisor skill. Evaluates job descriptions, runs an adaptive interview, tailors your CV (HTML + PDF), and drafts application responses with a writing discipline that does not read as AI-generated. When a user pastes a JD or URL, run the full pipeline end-to-end with zero manual steps.
 argument-hint: "[start | defend | respond | recompile | tracker | update]"
 ---
 
 # kairos: Career Advisor Skill
 
-**kairos** (Greek: *the right moment to act*) is a Claude Code skill that turns a job description into a tailored, ATS-clean, advisor-reviewed CV PDF without the AI-written smell. It converses with the user about their real experience, maps it to the JD, and writes copy the user can defend in an interview.
+**kairos** (Greek: *the right moment to act*) is an agent skill that turns a job description into a tailored, ATS-clean, advisor-reviewed CV PDF without the AI-written smell. It converses with the user about their real experience, maps it to the JD, and writes copy the user can defend in an interview. It runs on any host that speaks the SKILL.md agent-skills standard: Claude Code, OpenAI Codex CLI, Cursor, and others.
+
+## Host compatibility (read once, applies everywhere)
+
+kairos was written on Claude Code but must degrade gracefully on other hosts. Four global substitution rules:
+
+1. **`<skill-dir>`** means the directory containing this SKILL.md file, wherever it is installed: `~/.claude/skills/kairos` (Claude Code), `~/.agents/skills/kairos` or `~/.codex/skills/kairos` (Codex), or a project-local skills folder. Resolve it once at startup from this file's own location and use it for every path below.
+2. **`AskUserQuestion`** means the host's native structured-question tool: `AskUserQuestion` on Claude Code, `request_user_input` on Codex where available. If the host has no such tool, use the prose fallback format defined under Phase 0 (mini-blocks, one option per line) for every question in this document, then wait for the typed answer.
+3. **Sub-agent delegation** (the `Agent` tool with model routing below) is an optimization, not a requirement. On hosts without subagents, do the work inline in the current session: fetch URLs with the host's web tool, and apply the same untrusted-content rule directly. Skip nothing except the delegation itself.
+4. **`advisor()`** already has a documented fallback (self-audit). On any host where it does not exist, take the fallback path without comment.
 
 ## When to activate (no explicit invocation needed)
 
@@ -29,10 +38,10 @@ Run these checks every time kairos activates:
 
 Run this silently in the background. Never block the pipeline for it.
 
-1. Read `~/.claude/skills/kairos/.last_update_check` (a file containing a Unix timestamp).
+1. Read `<skill-dir>/.last_update_check` (a file containing a Unix timestamp).
 2. If the file does not exist, or the timestamp is more than 3 days old:
-   - Run `git -C ~/.claude/skills/kairos fetch origin main --quiet` to fetch without merging.
-   - Run `git -C ~/.claude/skills/kairos rev-list HEAD..origin/main --count` to count new commits.
+   - Run `git -C <skill-dir> fetch origin main --quiet` to fetch without merging.
+   - Run `git -C <skill-dir> rev-list HEAD..origin/main --count` to count new commits.
    - If count is 0: write the current timestamp to `.last_update_check` and continue silently.
    - If count > 0: write the current timestamp to `.last_update_check`, then surface a one-line notice to the user **after the pipeline completes** (not before):
 
@@ -45,7 +54,7 @@ Run this silently in the background. Never block the pipeline for it.
 > - "Yes, update now"
 > - "Not now"
 
-If confirmed: first check the install is a git clone (`git -C ~/.claude/skills/kairos rev-parse --git-dir`). If it is, run `git -C ~/.claude/skills/kairos pull origin main` and report what changed (the commit messages from the pulled commits); if the pull fails, show the error and suggest the user run it manually. If it is NOT a git clone (installed via `npx skills add`), do not attempt git: tell the user to run `npx skills update kairos` instead.
+If confirmed: first check the install is a git clone (`git -C <skill-dir> rev-parse --git-dir`). If it is, run `git -C <skill-dir> pull origin main` and report what changed (the commit messages from the pulled commits); if the pull fails, show the error and suggest the user run it manually. If it is NOT a git clone (installed via `npx skills add`), do not attempt git: tell the user to run `npx skills update kairos` instead.
 
 ### Step 1: Locate or create config
 
@@ -53,7 +62,7 @@ Look for `config.yaml` in the current working directory (`./config.yaml`).
 
 - **Found and filled in**: proceed.
 - **Found but still has placeholder values** (`identity.name` is `"Mohamed Ali"` or `identity.email` is `"mohamed@example.com"`): run the identity interview (see below) to replace them.
-- **Not found**: create `./config.yaml` by copying from `~/.claude/skills/kairos/config.example.yaml`, then run the identity interview.
+- **Not found**: create `./config.yaml` by copying from `<skill-dir>/config.example.yaml`, then run the identity interview.
 
 **Identity interview** (run via `AskUserQuestion`, one batch):
 - Full name
@@ -76,7 +85,7 @@ Look for the file at `paths.base_cv` in the config (default: `./templates/cv_tem
   > - "I have an HTML file - I'll give you the path"
   > - "I don't have one yet - build it with me step by step"
 
-  **If they paste or provide a path**: save it to `./templates/cv_template.html`, copying the kairos CSS structure from `~/.claude/skills/kairos/templates/cv_template.html` (content replaced with theirs, CSS and section order preserved).
+  **If they paste or provide a path**: save it to `./templates/cv_template.html`, copying the kairos CSS structure from `<skill-dir>/templates/cv_template.html` (content replaced with theirs, CSS and section order preserved).
 
   **If they want to build from scratch**: run the CV builder interview (see below), then save the result to `./templates/cv_template.html`.
 
@@ -87,7 +96,7 @@ Copy these from the skill installation directory if not already present in the w
 ```bash
 # pdf generation script
 mkdir -p ./scripts
-cp ~/.claude/skills/kairos/scripts/generate_pdf.js ./scripts/generate_pdf.js
+cp <skill-dir>/scripts/generate_pdf.js ./scripts/generate_pdf.js
 
 # application folders
 mkdir -p ./applications/preparing ./applications/submitted
@@ -157,7 +166,7 @@ The user is encouraged to customise `archetypes:` to their domain.
 
 ## Model Routing (cost and quality)
 
-Route sub-tasks to the right model. Do not do everything on the orchestrator model.
+Route sub-tasks to the right model. Do not do everything on the orchestrator model. This table is Claude Code specific: on hosts without subagents or model routing (see Host compatibility), run every sub-task inline in the current session. On Codex, an equivalent is a cheap subagent defined under `~/.codex/agents/` if the user has one, but never require it.
 
 | Sub-task | Model | Why |
 |----------|-------|-----|

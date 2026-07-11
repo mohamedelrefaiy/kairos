@@ -6,6 +6,7 @@ Format: `## [MAJOR.MINOR.PATCH.MICRO] - YYYY-MM-DD` with Added / Changed / Fixed
 ## [1.1.0.0] - 2026-07-11
 
 ### Added
+- Codex CLI support: a Host compatibility layer makes kairos run on any SKILL.md-compatible agent. Hardcoded Claude paths became `<skill-dir>`, structured questions fall back to the host picker or prose, sub-agent routing degrades to inline work. Install with `npx skills add mohamedelrefaiy/kairos -g -a codex`, invoke with `$kairos` or just paste a JD.
 - Cadence rules: seven structural anti-AI-writing rules (no generic participial tails, sentence-shape variance, one triad maximum, exact numbers over marketing numbers, casual engineer jargon, one "with" chain per sentence, semicolon cap) grounded in 2024-2026 recruiter reports and the arXiv 2406.07016 excess-vocabulary study.
 - Expanded banned lexicon (~40 new terms) plus a suspect-verb tier: "optimized"-class verbs are legal only with a named object and a number.
 - Two-part lint before every save: lexical banned-word grep, participial-tail grep, and a new suspect-verb review grep, plus a manual cadence pass.
