@@ -82,16 +82,15 @@ Paste a job description (or a URL) into Claude Code. kairos runs:
 ## Quick start
 
 ```bash
-# 1. Clone into your Claude skills directory (available across all projects)
-git clone https://github.com/mohamedelrefaiy/kairos.git ~/.claude/skills/kairos
+# 1. Install the skill (pick one)
+npx skills add mohamedelrefaiy/kairos -g -a claude-code            # via the agent-skills CLI
+git clone https://github.com/mohamedelrefaiy/kairos.git ~/.claude/skills/kairos   # or plain git
 
 # 2. Install Playwright
 npm install -g playwright && npx playwright install chromium
-
-# 3. Configure
-cp ~/.claude/skills/kairos/config.example.yaml ~/.claude/skills/kairos/config.yaml
-# Edit config.yaml: name, email, location, links
 ```
+
+No manual config step: on first run kairos detects a fresh workspace and interviews you to create `config.yaml`.
 
 Claude Code picks up the skill automatically on the next session - no restart needed. See `docs/INSTALL.md` for the full setup including dropping in your own CV.
 

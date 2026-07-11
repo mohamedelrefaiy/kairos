@@ -11,9 +11,21 @@ kairos is a Claude Code skill. It runs inside Claude Code, uses native tools lik
 Optional, improves quality:
 - **Claude Opus access** for the advisor gate. kairos degrades gracefully to a self-audit if Opus is not available.
 
-## 2. Clone into the Claude skills directory
+## 2. Install the skill
 
-Claude Code automatically discovers skills placed under `~/.claude/skills/` (available across all your projects) or `.claude/skills/` inside a specific project folder.
+**Option A - npx (quickest):** uses the open agent-skills CLI, which also supports Codex, Cursor, OpenCode, and other agents.
+
+```bash
+# global (all projects), Claude Code only
+npx skills add mohamedelrefaiy/kairos -g -a claude-code
+
+# or project-only: drop the -g
+npx skills add mohamedelrefaiy/kairos -a claude-code
+```
+
+Update later with `npx skills update kairos`. Note: npx installs are not git clones, so kairos's built-in `/kairos update` (git-based) will silently skip; use `npx skills update` instead.
+
+**Option B - git clone:** Claude Code automatically discovers skills placed under `~/.claude/skills/` (available across all your projects) or `.claude/skills/` inside a specific project folder.
 
 For global use across all projects:
 
@@ -27,7 +39,9 @@ For a single project only:
 git clone https://github.com/mohamedelrefaiy/kairos.git .claude/skills/kairos
 ```
 
-Claude Code picks up the skill on the next session automatically - no restart, no registration step.
+A git clone enables the built-in update check (`/kairos update`).
+
+Either way, Claude Code picks up the skill on the next session automatically - no restart, no registration step.
 
 ## 3. Install Playwright
 
