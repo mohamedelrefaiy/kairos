@@ -33,7 +33,7 @@ Same candidate, same Job Description (Data Platform Engineer). The Summary is th
 > Experienced engineer applying to a Data Platform role, with a strong background in distributed systems and a proven track record of building scalable pipelines. Passionate about leveraging AI to drive internal tooling improvements.
 
 **After** (kairos):
-> Data platform engineer with five years building streaming Kafka pipelines and a Python feature store serving two in-house ML teams, with open-source contributions to a widely used retrieval library. Shipped an internal evaluator for retrieval-augmented Large Language Model (LLM) assistants that cut review time by 40 percent across forty daily queries, with the whole stack open-sourced under Apache 2.0.
+> Data platform engineer, five years on streaming Kafka pipelines and a Python feature store used by two in-house ML teams. Built an internal evaluator for retrieval-augmented Large Language Model (LLM) assistants that cut review time by 40 percent. The whole stack is open source under the Apache 2.0 license.
 
 Everything in the *after* is a real, verifiable claim that a skeptical reader can fact-check against the CV body. Nothing in the *before* is. The bullets, the section order, and the keyword injections in the tailored CV go through the same review.
 
@@ -82,16 +82,15 @@ Paste a job description (or a URL) into Claude Code. kairos runs:
 ## Quick start
 
 ```bash
-# 1. Clone into your Claude skills directory (available across all projects)
-git clone https://github.com/mohamedelrefaiy/kairos.git ~/.claude/skills/kairos
+# 1. Install the skill (pick one)
+npx skills add mohamedelrefaiy/kairos -g -a claude-code            # via the agent-skills CLI
+git clone https://github.com/mohamedelrefaiy/kairos.git ~/.claude/skills/kairos   # or plain git
 
 # 2. Install Playwright
 npm install -g playwright && npx playwright install chromium
-
-# 3. Configure
-cp ~/.claude/skills/kairos/config.example.yaml ~/.claude/skills/kairos/config.yaml
-# Edit config.yaml: name, email, location, links
 ```
+
+No manual config step: on first run kairos detects a fresh workspace and interviews you to create `config.yaml`.
 
 Claude Code picks up the skill automatically on the next session - no restart needed. See `docs/INSTALL.md` for the full setup including dropping in your own CV.
 

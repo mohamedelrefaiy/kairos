@@ -13,7 +13,7 @@ Applicant Tracking Systems (ATS) are the first reader of your CV. kairos enforce
 - **No accented characters or special characters.** Use *resume* not *résumé*.
 - **No credentials next to the name.** No `PhD`, `MBA`, etc. next to the candidate's name in the header.
 - **No punctuation in the name line.** No `( ) , / -` in the `<h1>`.
-- **Proper capitalization and punctuation throughout.**
+- **Proper capitalization and punctuation throughout.** Deliberate Summary fragments (see the Summary spec's Register rules) are fine: they capitalize normally and end with a period, which is all ATS parsers and recruiters check.
 
 ## Dates
 
@@ -27,7 +27,8 @@ ALL CAPS. Use standard names where possible: EDUCATION, EXPERIENCE, PROJECTS, PU
 
 - **Distribute** across Summary (top five keywords from the JD), first bullet of each role, and the Skills section.
 - **Use exact JD vocabulary** when your experience honestly matches.
-- **Spell out acronyms on first use**: "Large Language Model (LLM)".
+- **Do not stuff.** Modern ATS (2025+) flag unnatural keyword density, and only a small minority of recruiters enable auto-rejection: a human reads the CV after parsing. Cap keywords at two per sentence and weave them into real, numbered achievements, never into a bare keyword block.
+- **Spell out acronyms on first use, but only those the JD itself spells out**: "Large Language Model (LLM)". Jargon the target reader uses casually (k8s, p99, CI) stays casual.
 - **Include the exact job title** somewhere in the resume (typically in the Summary or a relevant bullet).
 
 ## Content
